@@ -3,597 +3,1610 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa AI Assistant - Free Version</title>
+    <title>Nexa AI - Premium Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* [Keep all the previous CSS styles - they remain the same] */
+        /* Enhanced CSS Variables */
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --secondary-dark: #7c3aed;
+            --accent: #06b6d4;
+            --accent-light: #22d3ee;
+            --dark: #0f172a;
+            --darker: #020617;
+            --dark-light: #1e293b;
+            --light: #f8fafc;
+            --light-gray: #e2e8f0;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --success: #10b981;
+            --success-light: #34d399;
+            --warning: #f59e0b;
+            --warning-light: #fbbf24;
+            --error: #ef4444;
+            --error-light: #f87171;
+            --glass: rgba(255, 255, 255, 0.07);
+            --glass-dark: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            --shadow-light: 0 10px 25px rgba(0, 0, 0, 0.2);
+            --shadow-hover: 0 35px 60px -15px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-accent: linear-gradient(135deg, var(--accent), var(--accent-light));
+            --gradient-dark: linear-gradient(135deg, var(--darker), var(--dark));
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Poppins', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
+            background: var(--gradient-dark);
+            color: var(--light);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 60% 20%, rgba(244, 63, 94, 0.1) 0%, transparent 60%);
+            z-index: -2;
+            animation: backgroundPulse 20s ease-in-out infinite alternate;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary-light);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle linear infinite;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            width: 100%;
+            position: relative;
+            z-index: 1;
         }
 
-        header {
+        /* Enhanced Header */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 28px;
-            font-weight: 700;
-            color: #4cc9f0;
-        }
-
-        .logo i {
-            color: #4361ee;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            font-size: 17px;
-        }
-
-        nav a:hover {
-            color: #4cc9f0;
-        }
-
-        .main-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin-top: 40px;
-            align-items: flex-start;
-        }
-
-        .avatar-section {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .avatar-container {
+            gap: 18px;
             position: relative;
-            height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        .avatar {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+        .logo:hover {
+            transform: translateX(5px);
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: white;
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
             position: relative;
-            animation: float 6s ease-in-out infinite;
-            box-shadow: 0 15px 35px rgba(67, 97, 238, 0.4);
             overflow: hidden;
-        }
-
-        .avatar-face {
-            position: relative;
-            width: 140px;
-            height: 140px;
-        }
-
-        .avatar-eye {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            top: 40px;
-        }
-
-        .eye-left {
-            left: 30px;
-        }
-
-        .eye-right {
-            right: 30px;
-        }
-
-        .avatar-eye::after {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #16213e;
-            border-radius: 50%;
-            top: 6px;
-            left: 6px;
-        }
-
-        .avatar-mouth {
-            position: absolute;
-            width: 60px;
-            height: 30px;
-            border-bottom: 8px solid white;
-            border-radius: 0 0 50px 50px;
-            bottom: 30px;
-            left: 40px;
             transition: all 0.3s ease;
         }
 
-        .talking .avatar-mouth {
-            animation: talk 0.5s infinite alternate;
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite linear;
         }
 
-        .avatar-controls {
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--light), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .logo-subtitle {
+            font-size: 12px;
+            color: var(--gray-light);
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: -5px;
+        }
+
+        /* Enhanced Navigation */
+        .nav-links {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 40px;
+            list-style: none;
         }
 
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
+        .nav-link {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            padding: 8px 0;
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.3s ease;
-            font-size: 14px;
         }
 
-        .btn-primary {
-            background: linear-gradient(to right, #4361ee, #3a0ca3);
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+        }
+
+        .nav-link:hover {
             color: white;
+            transform: translateY(-2px);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .api-key-container {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .api-key-input {
+        .nav-link:hover::before {
             width: 100%;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
             color: white;
-            font-size: 14px;
-            margin-top: 10px;
-            font-family: monospace;
         }
 
-        .api-key-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+        .nav-link.active::before {
+            width: 100%;
         }
 
-        .api-key-info {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-top: 8px;
+        .nav-badge {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        /* Enhanced Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1.1fr 1.9fr;
+            gap: 35px;
+            margin-top: 40px;
+            animation: contentFade 0.8s ease-out;
+        }
+
+        /* Enhanced Avatar Section */
+        .avatar-section {
+            background: var(--glass-dark);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 28px;
+            padding: 35px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .avatar-section:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .avatar-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: white;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 15px;
         }
 
-        .free-api-options {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(67, 97, 238, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(67, 97, 238, 0.3);
+        .section-title i {
+            color: var(--accent-light);
+            background: rgba(6, 182, 212, 0.1);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
         }
 
-        .free-api-options h4 {
-            color: #4cc9f0;
+        /* Premium Human Avatar */
+        .human-avatar-container {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            background: rgba(30, 41, 59, 0.4);
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 35px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 
+                inset 0 0 40px rgba(0, 0, 0, 0.3),
+                0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        .human-avatar-container:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .human-avatar {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 240px;
+            height: 240px;
+        }
+
+        .avatar-head {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #5b21b6, #7c3aed, #a78bfa);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 60px rgba(124, 58, 237, 0.5),
+                inset 0 0 40px rgba(255, 255, 255, 0.15);
+            animation: avatarFloat 8s ease-in-out infinite;
+            filter: saturate(1.2);
+        }
+
+        .avatar-face {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+        }
+
+        .eyes-container {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .eye {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.3),
+                inset 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .eye::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 24px;
+            height: 24px;
+            background: #1e1b4b;
+            border-radius: 50%;
+            transition: all 0.1s ease;
+        }
+
+        .eye::after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .eyebrow {
+            position: absolute;
+            top: -18px;
+            width: 50px;
+            height: 10px;
+            background: #4c1d95;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .eyebrow-left {
+            left: -3px;
+            transform: rotate(5deg);
+        }
+
+        .eyebrow-right {
+            right: -3px;
+            transform: rotate(-5deg);
+        }
+
+        .nose {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 36px;
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+            border-radius: 9px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .mouth-container {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 50px;
+        }
+
+        .mouth {
+            width: 100%;
+            height: 22px;
+            background: linear-gradient(to bottom, #dc2626, #ef4444);
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 
+                0 6px 20px rgba(220, 38, 38, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .mouth.talking {
+            animation: premiumTalk 0.5s infinite alternate;
+        }
+
+        .tongue {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 12px;
+            background: linear-gradient(to bottom, #f87171, #fca5a5);
+            border-radius: 12px 12px 0 0;
+            display: none;
+        }
+
+        .mouth.talking .tongue {
+            display: block;
+            animation: premiumTongue 0.5s infinite alternate;
+        }
+
+        .hair {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 60px;
+            background: linear-gradient(to bottom, #312e81, #4c1d95);
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .hair::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 40px;
+            background: linear-gradient(to bottom, #4c1d95, #5b21b6);
+        }
+
+        .avatar-status {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            right: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 16px 24px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-status:hover {
+            background: rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            animation: statusPulse 2s infinite;
+        }
+
+        .status-text {
+            font-size: 15px;
+            color: var(--light-gray);
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .status-action {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .status-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Enhanced Controls */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .control-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .control-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .control-card:hover::before {
+            left: 100%;
+        }
+
+        .control-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.25);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .control-card.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.15));
+            border-color: var(--primary);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.3);
+        }
+
+        .control-card.active::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 20px;
+            background: var(--gradient-primary);
+            z-index: -1;
+            opacity: 0.3;
+            animation: borderGlow 2s infinite;
+        }
+
+        .control-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .control-card:hover .control-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .control-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .control-description {
+            font-size: 12px;
+            color: var(--gray-light);
+            line-height: 1.4;
+        }
+
+        /* Enhanced API Section */
+        .api-section {
+            margin-top: 30px;
+        }
+
+        .api-input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .api-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--light-gray);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .free-api-links {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+        .api-label i {
+            color: var(--accent-light);
         }
 
-        .free-api-link {
-            color: #4cc9f0;
-            text-decoration: none;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            border-radius: 6px;
-            transition: background 0.3s;
+        .api-input-wrapper {
+            position: relative;
         }
 
-        .free-api-link:hover {
-            background: rgba(76, 201, 240, 0.1);
-        }
-
-        .free-api-link i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .model-selector {
-            margin-top: 15px;
-        }
-
-        .model-select {
+        .api-input {
             width: 100%;
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            padding: 16px 52px 16px 24px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
             color: white;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .model-select option {
-            background: #1a1a2e;
-            color: white;
-        }
-
-        .chat-section {
-            flex: 2;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            height: 500px;
-        }
-
-        .chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-header h2 {
-            font-size: 24px;
-            color: #4cc9f0;
-        }
-
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #4ade80;
-        }
-
-        .status-dot.disconnected {
-            background: #ef4444;
-        }
-
-        .status-dot.connecting {
-            background: #f59e0b;
-            animation: pulse 1.5s infinite;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding-right: 10px;
-            margin-bottom: 20px;
-        }
-
-        .message {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message-user {
-            align-items: flex-end;
-        }
-
-        .message-content {
-            max-width: 80%;
-            padding: 15px;
-            border-radius: 18px;
-            line-height: 1.5;
-        }
-
-        .message-ai .message-content {
-            background: rgba(67, 97, 238, 0.2);
-            border: 1px solid rgba(67, 97, 238, 0.3);
-            border-top-left-radius: 5px;
-        }
-
-        .message-user .message-content {
-            background: rgba(76, 201, 240, 0.2);
-            border: 1px solid rgba(76, 201, 240, 0.3);
-            border-top-right-radius: 5px;
-        }
-
-        .message-sender {
-            font-size: 12px;
-            margin-bottom: 5px;
-            opacity: 0.8;
-        }
-
-        .chat-input-container {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input {
-            flex-grow: 1;
-            padding: 15px 20px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
+            font-size: 15px;
+            font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+            transition: all 0.3s ease;
             outline: none;
         }
 
-        .chat-input:focus {
-            border-color: #4361ee;
+        .api-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(30, 41, 59, 0.8);
         }
 
-        .chat-input:disabled {
+        .api-input::placeholder {
+            color: var(--gray-light);
+        }
+
+        .api-action {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--gray-light);
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .api-action:hover {
+            color: var(--accent-light);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .api-info {
+            font-size: 12px;
+            color: var(--gray-light);
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(30, 41, 59, 0.4);
+            border-radius: 10px;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Enhanced Free API Options */
+        .free-api-section {
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.08));
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .free-api-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
+        }
+
+        .free-api-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .free-api-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .api-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--light-gray);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .api-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .api-option:hover::before {
+            left: 100%;
+        }
+
+        .api-option:hover {
+            transform: translateX(10px) translateY(-2px);
+            border-color: var(--primary);
+            background: rgba(30, 41, 59, 0.7);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .api-option-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary-light);
+            flex-shrink: 0;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .api-option-text {
+            flex: 1;
+        }
+
+        .api-option-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .api-option-description {
+            font-size: 13px;
+            color: var(--gray-light);
+            line-height: 1.4;
+        }
+
+        .api-option-badge {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        /* Enhanced Chat Section */
+        .chat-section {
+            background: var(--glass-dark);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 28px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            transition: all 0.4s ease;
+        }
+
+        .chat-section:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .chat-header {
+            padding: 30px 35px;
+            background: rgba(30, 41, 59, 0.7);
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        .chat-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
             opacity: 0.5;
-            cursor: not-allowed;
+        }
+
+        .chat-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .chat-subtitle {
+            color: var(--gray-light);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-subtitle::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: statusPulse 2s infinite;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            max-width: 82%;
+            animation: messageSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-bubble {
+            padding: 18px 22px;
+            border-radius: 20px;
+            line-height: 1.6;
+            font-size: 15px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .message.ai .message-bubble {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(139, 92, 246, 0.12));
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: var(--light-gray);
+            border-bottom-left-radius: 6px;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.18), rgba(14, 165, 233, 0.12));
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            color: var(--light-gray);
+            border-bottom-right-radius: 6px;
+        }
+
+        .message-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .message-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin: 0 16px;
+            flex-shrink: 0;
+            align-self: flex-end;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .message.ai .message-avatar {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .message-avatar:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--gray-light);
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .message:hover .message-time {
+            opacity: 1;
+        }
+
+        .message-time i {
+            font-size: 10px;
+        }
+
+        .message-actions {
+            position: absolute;
+            bottom: -25px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+
+        .message-action {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--glass-border);
+            color: var(--light-gray);
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .message-action:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .chat-input-area {
+            padding: 30px;
+            background: rgba(30, 41, 59, 0.7);
+            border-top: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        .chat-input-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
+            opacity: 0.5;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 18px 28px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .chat-input::placeholder {
+            color: var(--gray-light);
+            font-style: italic;
         }
 
         .send-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: var(--gradient-primary);
             border: none;
             color: white;
             cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
-            transition: all 0.3s ease;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .send-btn:hover:not(:disabled) {
-            transform: scale(1.05);
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
         }
 
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .send-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.6);
         }
 
-        .features {
-            margin-top: 60px;
-            padding: 40px 0;
+        .send-btn:hover::before {
+            left: 100%;
         }
 
-        .features h2 {
+        .send-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .voice-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--glass-border);
+            color: var(--primary-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .voice-btn:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .voice-btn:hover::before {
+            left: 100%;
+        }
+
+        .voice-btn.listening {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+            border-color: rgba(239, 68, 68, 0.3);
+            color: var(--error-light);
+            animation: listeningPulse 1.5s infinite;
+        }
+
+        .voice-btn.listening::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 23px;
+            border: 2px solid var(--error-light);
+            opacity: 0.3;
+            animation: listeningRing 1.5s infinite;
+        }
+
+        /* Enhanced Features Section */
+        .features-section {
+            margin-top: 80px;
+            padding: 70px 0;
+            position: relative;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+        }
+
+        .section-header {
             text-align: center;
-            font-size: 32px;
-            margin-bottom: 40px;
-            color: #4cc9f0;
+            margin-bottom: 60px;
+            position: relative;
         }
 
-        .feature-grid {
+        .section-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--light), var(--accent-light), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: var(--gray-light);
+            font-size: 18px;
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass-dark);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
         }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .feature-icon {
-            font-size: 40px;
-            margin-bottom: 20px;
-            color: #4361ee;
-        }
-
-        .feature-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 30px 0;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes talk {
-            0% { height: 20px; border-radius: 0 0 50px 50px; }
-            100% { height: 10px; border-radius: 0 0 30px 30px; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            
-            nav ul {
-                display: none;
-            }
-            
-            .logo span {
-                font-size: 22px;
-            }
-            
-            .avatar-controls {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(67, 97, 238, 0.5);
-            border-radius: 10px;
-        }
-
-        .voice-animation {
+        .feature-card::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            opacity: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
         }
 
-        .listening .voice-animation {
-            animation: voicePulse 1.5s infinite;
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
         }
 
-        @keyframes voicePulse {
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--primary-light);
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--gray-light);
+            line-height: 1.7;
+            font-size: 15.5px;
+            margin-bottom: 25px;
+        }
+
+        .feature-link {
+            color: var(--accent-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-link:hover {
+            color: white;
+            gap: 12px;
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            margin-top: 100px;
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: var(--gradient-primary);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .footer-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--light), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-text {
+            color: var(--gray-light);
+            font-size: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .footer-link {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .footer-copyright {
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        /* Enhanced Animations */
+        @keyframes backgroundPulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
-                opacity: 1;
+                background-position: 0% 0%;
+                filter: hue-rotate(0deg);
             }
-            70% {
-                box-shadow: 0 0 0 20px rgba(67, 97, 238, 0);
-                opacity: 0.7;
+            50% {
+                background-position: 100% 100%;
+                filter: hue-rotate(90deg);
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+                background-position: 0% 0%;
+                filter: hue-rotate(0deg);
+            }
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
                 opacity: 0;
             }
         }
 
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes avatarFloat {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                box-shadow: 
+                    0 0 60px rgba(124, 58, 237, 0.5),
+                    inset 0 0 40px rgba(255, 255, 255, 0.15);
+            }
+            50% {
+                transform: translate(-50%, calc(-50% - 15px)) scale(1.02) rotate(2deg);
+                box-shadow: 
+                    0 0 80px rgba(124, 58, 237, 0.6),
+                    inset 0 0 50px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        @keyframes premiumTalk {
+            0% {
+                height: 22px;
+                border-radius: 0 0 50px 50px;
+                transform: scaleY(1);
+            }
+            50% {
+                height: 12px;
+                border-radius: 0 0 30px 30px;
+                transform: scaleY(0.8);
+            }
+            100% {
+                height: 22px;
+                border-radius: 0 0 50px 50px;
+                transform: scaleY(1);
+            }
+        }
+
+        @keyframes premiumTongue {
+            0% {
+                height: 12px;
+                width: 36px;
+            }
+            50% {
+                height: 8px;
+                width: 40px;
+            }
+            100% {
+                height: 12px;
+                width: 36px;
+            }
+        }
+
+        @keyframes statusPulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes listeningPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+            }
+        }
+
+        @keyframes listeningRing {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes contentFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Enhanced Typing Indicator */
         .typing-indicator {
             display: flex;
-            gap: 5px;
-            padding: 10px;
+            gap: 8px;
+            padding: 20px 25px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 22px;
+            width: fit-content;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .typing-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
+            background: var(--gradient-primary);
             border-radius: 50%;
-            background: #4361ee;
             animation: typingBounce 1.4s infinite ease-in-out;
         }
 
@@ -601,198 +1614,496 @@
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
 
         @keyframes typingBounce {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
+            0%, 80%, 100% {
+                transform: translateY(0);
+                box-shadow: 0 0 10px var(--primary);
+            }
+            40% {
+                transform: translateY(-15px);
+                box-shadow: 0 0 20px var(--primary);
+            }
         }
 
-        .message-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-
-        .message:hover .message-actions {
-            opacity: 1;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            color: #4cc9f0;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-
-        .action-btn:hover {
-            background: rgba(76, 201, 240, 0.1);
-        }
-
+        /* Enhanced Notification */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-left: 4px solid #4361ee;
-            z-index: 1000;
-            transform: translateX(120%);
-            transition: transform 0.3s ease;
-            max-width: 300px;
+            top: 40px;
+            right: 40px;
+            padding: 22px 28px;
+            background: var(--glass-dark);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            z-index: 10000;
+            transform: translateX(150%) translateY(-20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 380px;
+            border-left: 5px solid var(--primary);
+            opacity: 0;
         }
 
         .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            border-left-color: #ef4444;
+            transform: translateX(0) translateY(0);
+            opacity: 1;
         }
 
         .notification.success {
-            border-left-color: #4ade80;
+            border-left-color: var(--success);
+        }
+
+        .notification.error {
+            border-left-color: var(--error);
         }
 
         .notification.info {
-            border-left-color: #3b82f6;
+            border-left-color: var(--accent);
         }
 
-        .demo-mode {
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .notification.success .notification-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .notification.error .notification-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .notification.info .notification-icon {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent);
+        }
+
+        .notification.warning .notification-icon {
             background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
+            color: var(--warning);
         }
 
-        .demo-btn {
+        .notification-text {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--light-gray);
+            line-height: 1.5;
+        }
+
+        .notification-close {
+            background: transparent;
+            border: none;
+            color: var(--gray-light);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .notification-close:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Enhanced Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.4);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        /* Enhanced Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .chat-section {
+                height: 650px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 25px;
+                padding-bottom: 25px;
+            }
+            
+            .nav-links {
+                gap: 25px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .human-avatar-container {
+                height: 300px;
+            }
+            
+            .controls-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .section-header h2 {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            
+            .section-header h2 {
+                font-size: 32px;
+            }
+            
+            .chat-input-area {
+                padding: 20px;
+            }
+            
+            .input-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .chat-input, .voice-btn, .send-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 28px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-link {
+                font-size: 14px;
+            }
+            
+            .human-avatar-container {
+                height: 260px;
+            }
+            
+            .feature-card {
+                padding: 25px;
+            }
+            
+            .notification {
+                left: 15px;
+                right: 15px;
+                max-width: none;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
-            margin-top: 10px;
-            background: linear-gradient(to right, #f59e0b, #d97706);
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Selection Styling */
+        ::selection {
+            background: rgba(99, 102, 241, 0.3);
+            color: white;
+        }
+
+        ::-moz-selection {
+            background: rgba(99, 102, 241, 0.3);
+            color: white;
+        }
+
+        /* Focus Visible */
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Print Styles */
+        @media print {
+            .avatar-section,
+            .voice-btn,
+            .notification,
+            .footer {
+                display: none;
+            }
+            
+            .chat-section {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fas fa-robot"></i>
-                <span>Nexa AI - Free</span>
+        <!-- Enhanced Header -->
+        <header class="header">
+            <div class="logo" id="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div>
+                    <div class="logo-text">Nexa AI</div>
+                    <div class="logo-subtitle">PREMIUM ASSISTANT</div>
+                </div>
             </div>
             <nav>
-                <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-key"></i> Get Free Key</a></li>
-                    <li><a href="#"><i class="fas fa-heart"></i> Support</a></li>
-                    <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-key"></i> API Keys <span class="nav-badge">FREE</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-question-circle"></i> Help</a></li>
                 </ul>
             </nav>
         </header>
 
         <div class="main-content">
+            <!-- Enhanced Avatar Section -->
             <section class="avatar-section">
-                <h2>Free AI Assistant</h2>
-                <div class="avatar-container">
-                    <div class="avatar" id="avatar">
-                        <div class="voice-animation"></div>
+                <h2 class="section-title">
+                    <i class="fas fa-user-tie"></i> Premium Assistant
+                </h2>
+                
+                <div class="human-avatar-container">
+                    <div class="human-avatar">
+                        <div class="avatar-head"></div>
                         <div class="avatar-face">
-                            <div class="avatar-eye eye-left"></div>
-                            <div class="avatar-eye eye-right"></div>
-                            <div class="avatar-mouth"></div>
+                            <div class="eyes-container">
+                                <div class="eyebrow eyebrow-left"></div>
+                                <div class="eye left-eye"></div>
+                                <div class="eye right-eye"></div>
+                                <div class="eyebrow eyebrow-right"></div>
+                            </div>
+                            <div class="nose"></div>
+                            <div class="mouth-container">
+                                <div class="mouth" id="mouth">
+                                    <div class="tongue"></div>
+                                </div>
+                            </div>
                         </div>
+                        <div class="hair"></div>
                     </div>
-                </div>
-                <div class="avatar-info">
-                    <h3>Nexa Free</h3>
-                    <p>Your intelligent AI assistant powered by free AI APIs. No credit card required!</p>
+                    
+                    <div class="avatar-status">
+                        <div class="status-indicator"></div>
+                        <div class="status-text" id="statusText">Premium Demo Mode Active</div>
+                        <button class="status-action" id="statusAction">Connect API</button>
+                    </div>
                 </div>
                 
-                <div class="api-key-container">
-                    <label for="apiKey">AI API Key (Optional):</label>
-                    <input type="password" id="apiKey" class="api-key-input" placeholder="Enter Gemini/Cohere/OpenAI key">
-                    <div class="api-key-info">
-                        <i class="fas fa-info-circle"></i>
-                        Leave empty for demo mode, or use a free API key for real AI
+                <div class="controls-grid">
+                    <div class="control-card active" id="demoControl" data-tooltip="Try without API key">
+                        <div class="control-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="control-label">Demo Mode</div>
+                        <div class="control-description">Try instantly without setup</div>
+                    </div>
+                    
+                    <div class="control-card" id="voiceControl" data-tooltip="Enable voice input">
+                        <div class="control-icon">
+                            <i class="fas fa-microphone-alt"></i>
+                        </div>
+                        <div class="control-label">Voice Chat</div>
+                        <div class="control-description">Speak naturally</div>
+                    </div>
+                    
+                    <div class="control-card" id="apiControl" data-tooltip="Configure API settings">
+                        <div class="control-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div class="control-label">API Setup</div>
+                        <div class="control-description">Connect real AI</div>
+                    </div>
+                    
+                    <div class="control-card" id="settingsControl" data-tooltip="Customize your experience">
+                        <div class="control-icon">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <div class="control-label">Settings</div>
+                        <div class="control-description">Personalize</div>
                     </div>
                 </div>
-
-                <div class="free-api-options">
-                    <h4><i class="fas fa-gift"></i> Get Free API Keys</h4>
-                    <div class="free-api-links">
-                        <a href="https://makersuite.google.com/app/apikey" target="_blank" class="free-api-link">
-                            <i class="fab fa-google"></i> Google Gemini (Recommended - 60 RPM free)
-                        </a>
-                        <a href="https://dashboard.cohere.com/api-keys" target="_blank" class="free-api-link">
-                            <i class="fas fa-key"></i> Cohere API (Free tier available)
-                        </a>
-                        <a href="https://platform.openai.com/api-keys" target="_blank" class="free-api-link">
-                            <i class="fas fa-brain"></i> OpenAI ($5 free credit)
-                        </a>
+                
+                <!-- API Section -->
+                <div class="api-section">
+                    <div class="api-input-group">
+                        <label class="api-label">
+                            <i class="fas fa-key"></i> API Configuration
+                        </label>
+                        <div class="api-input-wrapper">
+                            <input type="password" id="apiKey" class="api-input" placeholder="Enter your API key (optional)">
+                            <button class="api-action" id="toggleApiKey" title="Show/Hide API key">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="api-info">
+                            <i class="fas fa-info-circle"></i>
+                            Your API key is stored locally and never sent to our servers
+                        </div>
                     </div>
-                </div>
-
-                <div class="model-selector">
-                    <label for="modelSelect">AI Model:</label>
-                    <select id="modelSelect" class="model-select">
-                        <option value="gemini">Google Gemini (Recommended)</option>
-                        <option value="cohere">Cohere Command</option>
-                        <option value="demo">Demo Mode (No API needed)</option>
+                    
+                    <!-- Model Selector -->
+                    <select id="modelSelect" class="api-input" style="margin-top: 15px; cursor: pointer;">
+                        <option value="demo">🎯 Demo Mode (No API needed)</option>
+                        <option value="gemini">🚀 Google Gemini (60 free requests/min)</option>
+                        <option value="cohere">⚡ Cohere Command (Free tier available)</option>
+                        <option value="openai">🤖 OpenAI (GPT-3.5/4 with credit)</option>
                     </select>
                 </div>
-
-                <div class="demo-mode">
-                    <p><i class="fas fa-play-circle"></i> <strong>Demo Mode:</strong> Try without an API key using simulated responses</p>
-                    <button class="btn demo-btn" id="demoBtn">
-                        <i class="fas fa-play"></i> Enable Demo Mode
-                    </button>
-                </div>
-
-                <div class="avatar-controls">
-                    <button class="btn btn-primary" id="connectBtn">
-                        <i class="fas fa-plug"></i> Connect AI
-                    </button>
-                    <button class="btn btn-secondary" id="voiceBtn" disabled>
-                        <i class="fas fa-microphone"></i> Voice Input
-                    </button>
-                    <button class="btn btn-secondary" id="clearBtn">
-                        <i class="fas fa-trash"></i> Clear Chat
-                    </button>
+                
+                <!-- Free API Options -->
+                <div class="free-api-section">
+                    <div class="free-api-title">
+                        <i class="fas fa-gift"></i> Get Free API Keys
+                    </div>
+                    <div class="free-api-grid">
+                        <a href="https://makersuite.google.com/app/apikey" target="_blank" class="api-option" id="geminiOption">
+                            <div class="api-option-icon">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div class="api-option-text">
+                                <div class="api-option-title">
+                                    Google Gemini
+                                    <span class="api-option-badge">Recommended</span>
+                                </div>
+                                <div class="api-option-description">
+                                    60 free requests per minute, no credit card required
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        
+                        <a href="https://dashboard.cohere.com/api-keys" target="_blank" class="api-option" id="cohereOption">
+                            <div class="api-option-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="api-option-text">
+                                <div class="api-option-title">
+                                    Cohere API
+                                    <span class="api-option-badge">Free Tier</span>
+                                </div>
+                                <div class="api-option-description">
+                                    Generous free tier with advanced language capabilities
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </section>
 
+            <!-- Enhanced Chat Section -->
             <section class="chat-section">
-                <div class="chat-container">
-                    <div class="chat-header">
-                        <h2>Chat with Nexa</h2>
-                        <div class="status">
-                            <div class="status-dot disconnected" id="statusDot"></div>
-                            <span id="statusText">Ready for Demo</span>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message message-ai">
-                            <div class="message-sender">Nexa AI</div>
-                            <div class="message-content">Hello! I'm Nexa, your free AI assistant. You can use me in <strong>demo mode</strong> or connect a free API key for real AI responses. Click "Enable Demo Mode" to start chatting instantly!</div>
-                        </div>
-                        <div class="message message-ai">
-                            <div class="message-sender">Nexa AI</div>
-                            <div class="message-content">For the best free experience, get a <strong>Google Gemini API key</strong> (60 requests per minute free). It's completely free and gives you access to advanced AI capabilities!</div>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-input-container">
-                        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here..." disabled>
-                        <button class="send-btn" id="sendBtn" disabled>
+                <div class="chat-header">
+                    <h2 class="chat-title">Premium AI Assistant</h2>
+                    <p class="chat-subtitle">Intelligent conversations with memory and context</p>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+                
+                <div class="chat-input-area">
+                    <div class="input-container">
+                        <button class="voice-btn" id="voiceBtn" title="Voice input">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything...">
+                        <button class="send-btn" id="sendBtn" title="Send message">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
@@ -800,547 +2111,820 @@
             </section>
         </div>
 
-        <section class="features">
-            <h2>100% Free AI Features</h2>
-            <div class="feature-grid">
+        <!-- Enhanced Features Section -->
+        <section class="features-section">
+            <div class="section-header">
+                <h2>Advanced AI Capabilities</h2>
+                <p>Experience the future of human-AI interaction with our premium features</p>
+            </div>
+            
+            <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fab fa-google"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <h3>Gemini API</h3>
-                    <p>Free 60 requests per minute with Google's Gemini API. No credit card required!</p>
+                    <h3>Intelligent Conversations</h3>
+                    <p>Advanced natural language processing with context awareness, memory retention, and personalized responses.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h3>Demo Mode</h3>
-                    <p>Try instantly without any API key. Perfect for testing and demonstrations.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <h3>Real Conversations</h3>
-                    <p>Natural dialogue with context memory and intelligent responses.</p>
-                </div>
+                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-code"></i>
                     </div>
-                    <h3>Code Help</h3>
-                    <p>Get help with programming, debugging, and learning to code.</p>
+                    <h3>Code Assistance</h3>
+                    <p>Real-time code generation, debugging, optimization, and learning support across multiple programming languages.</p>
+                    <a href="#" class="feature-link">
+                        Try code assistant <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-pen-nib"></i>
+                    </div>
+                    <h3>Creative Writing</h3>
+                    <p>AI-powered content creation, editing, brainstorming, and creative assistance for all your writing needs.</p>
+                    <a href="#" class="feature-link">
+                        Explore writing tools <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Problem Solving</h3>
+                    <p>Advanced analytical capabilities for complex problem-solving, research, and decision support.</p>
+                    <a href="#" class="feature-link">
+                        See examples <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </section>
+
+        <!-- Enhanced Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="footer-logo-text">Nexa AI</div>
+                </div>
+                
+                <p class="footer-text">
+                    Experience the future of AI assistance with our premium platform. 
+                    Completely free to use with optional API integration for enhanced capabilities.
+                </p>
+                
+                <div class="footer-links">
+                    <a href="#" class="footer-link"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                    <a href="#" class="footer-link"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                    <a href="#" class="footer-link"><i class="fas fa-book"></i> Documentation</a>
+                    <a href="#" class="footer-link"><i class="fas fa-envelope"></i> Contact Us</a>
+                </div>
+                
+                <div class="footer-copyright">
+                    © 2023 Nexa AI Assistant. All rights reserved. | Premium Edition
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 Nexa AI Assistant - Free Version</p>
-            <p>This assistant works with free AI APIs. No subscription fees ever!</p>
+    <!-- Enhanced Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="notification-text">
+                <div class="notification-title" id="notificationTitle">Welcome</div>
+                <div class="notification-message" id="notificationMessage">Loading premium AI assistant...</div>
+            </div>
+            <button class="notification-close" id="notificationClose">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-    </footer>
+    </div>
 
-    <div class="notification" id="notification"></div>
-
+    <!-- JavaScript -->
     <script>
+        // ============================================
+        // ENHANCED JAVASCRIPT FUNCTIONALITY
+        // ============================================
+
         // DOM Elements
-        const avatar = document.getElementById('avatar');
-        const connectBtn = document.getElementById('connectBtn');
+        const leftEye = document.querySelector('.left-eye');
+        const rightEye = document.querySelector('.right-eye');
+        const mouth = document.getElementById('mouth');
+        const statusText = document.getElementById('statusText');
+        const statusAction = document.getElementById('statusAction');
         const voiceBtn = document.getElementById('voiceBtn');
-        const clearBtn = document.getElementById('clearBtn');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
         const chatMessages = document.getElementById('chatMessages');
         const apiKeyInput = document.getElementById('apiKey');
-        const statusDot = document.getElementById('statusDot');
-        const statusText = document.getElementById('statusText');
+        const toggleApiKey = document.getElementById('toggleApiKey');
         const modelSelect = document.getElementById('modelSelect');
-        const demoBtn = document.getElementById('demoBtn');
         const notification = document.getElementById('notification');
+        const notificationTitle = document.getElementById('notificationTitle');
+        const notificationMessage = document.getElementById('notificationMessage');
+        const notificationClose = document.getElementById('notificationClose');
+        const particlesContainer = document.getElementById('particles');
+        const logo = document.getElementById('logo');
 
-        // State variables
-        let isConnected = false;
-        let isListening = false;
-        let isDemoMode = false;
-        let apiKey = localStorage.getItem('nexa_free_api_key') || '';
-        let selectedModel = localStorage.getItem('nexa_free_model') || 'demo';
-        let conversationHistory = [];
-        let recognition = null;
+        // Control Cards
+        const demoControl = document.getElementById('demoControl');
+        const voiceControl = document.getElementById('voiceControl');
+        const apiControl = document.getElementById('apiControl');
+        const settingsControl = document.getElementById('settingsControl');
 
-        // Demo responses (simulated AI)
+        // API Options
+        const geminiOption = document.getElementById('geminiOption');
+        const cohereOption = document.getElementById('cohereOption');
+
+        // State Management
+        const state = {
+            isConnected: true,
+            isListening: false,
+            isDemoMode: true,
+            isTyping: false,
+            isAvatarTalking: false,
+            apiKey: localStorage.getItem('nexa_premium_api_key') || '',
+            selectedModel: localStorage.getItem('nexa_premium_model') || 'demo',
+            conversationHistory: [],
+            activeControl: 'demo',
+            notificationQueue: [],
+            isNotificationShowing: false,
+            eyeMovementInterval: null,
+            blinkInterval: null,
+            expressionInterval: null,
+            particles: []
+        };
+
+        // Enhanced Demo Responses
         const demoResponses = [
-            "I understand your question! In a real AI system, I would provide a detailed answer based on the latest information available. Since this is demo mode, I'm showing you what real AI responses would look like.",
-            "That's an interesting point! A real AI assistant would analyze your query and provide helpful insights. I can simulate various responses including explanations, creative writing, or problem-solving.",
-            "Great question! While I'm in demo mode, I can show you how I would respond. I can help with learning, coding, writing, research, and general knowledge questions.",
-            "Thanks for asking! In full AI mode with an API key, I could access real-time information and provide accurate, detailed responses to your queries.",
-            "I appreciate your curiosity! This demo shows the interface capabilities. With a free Google Gemini API key, you'd get real AI responses with 60 free requests per minute.",
-            "That's something I can help with! A real AI would process your request and generate a helpful response. Try getting a free API key to experience full functionality.",
-            "Interesting topic! I'm designed to assist with a wide range of subjects. The demo mode gives you a preview, while real API access enables comprehensive assistance."
+            {
+                text: "I understand your question! In a fully connected AI system, I would provide detailed, nuanced responses based on comprehensive data analysis and contextual understanding.",
+                type: "analytical"
+            },
+            {
+                text: "That's an excellent point! With API integration, I could access vast information resources, process complex queries in real-time, and deliver accurate, up-to-date responses tailored to your specific needs.",
+                type: "informative"
+            },
+            {
+                text: "Great question! While I'm in demo mode, I can demonstrate sophisticated conversation patterns, provide structured explanations, and showcase how I would handle various types of inquiries with intelligence and clarity.",
+                type: "educational"
+            },
+            {
+                text: "Thank you for your inquiry! This premium interface demonstrates advanced AI interaction capabilities. Adding a free API key unlocks real computational power, memory retention, and advanced natural language processing.",
+                type: "technical"
+            },
+            {
+                text: "I appreciate your curiosity! This elegant platform shows what's possible with modern AI. Try connecting a free Google Gemini API key for 60 free requests per minute of real AI processing.",
+                type: "encouraging"
+            },
+            {
+                text: "That's something I'm designed to help with! In full AI mode, I could provide step-by-step solutions, creative alternatives, practical implementations, and detailed explanations for complex scenarios.",
+                type: "helpful"
+            },
+            {
+                text: "Interesting topic! I'm built to handle diverse subjects with sophistication and depth. The demo gives you a taste of premium AI interaction, while API access provides the full computational experience.",
+                type: "engaging"
+            }
         ];
 
-        // Initialize
+        // Enhanced Welcome Messages
+        const welcomeMessages = [
+            "Welcome to Nexa AI Premium! I'm your sophisticated AI assistant. How can I help you today?",
+            "Hello! I'm Nexa, ready to assist with intelligent conversations. What would you like to explore?",
+            "Greetings! I'm here to help with questions, creative tasks, problem-solving, and more. What's on your mind?",
+            "Welcome! As your AI assistant, I can help with learning, coding, writing, analysis, and much more."
+        ];
+
+        // Initialize Application
         function init() {
-            // Load saved settings
-            if (apiKey) {
-                apiKeyInput.value = '••••••••••••••••';
+            console.log('🚀 Initializing Nexa AI Premium...');
+            
+            // Load saved state
+            loadSavedState();
+            
+            // Initialize UI components
+            initParticles();
+            initAvatarAnimations();
+            initSpeechRecognition();
+            initTooltips();
+            initNavigation();
+            initWelcomeMessages();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification(
+                    'Welcome to Nexa AI Premium',
+                    'Experience sophisticated AI conversations with our premium assistant.',
+                    'info'
+                );
+            }, 1000);
+            
+            console.log('✅ Nexa AI Premium initialized successfully');
+        }
+
+        // Load Saved State
+        function loadSavedState() {
+            // Load API key
+            if (state.apiKey) {
+                apiKeyInput.value = '•'.repeat(16);
             }
-            modelSelect.value = selectedModel;
+            
+            // Load model selection
+            modelSelect.value = state.selectedModel;
             
             // Load conversation history
-            const savedHistory = localStorage.getItem('nexa_free_conversation');
+            const savedHistory = localStorage.getItem('nexa_premium_conversation_history');
             if (savedHistory) {
-                conversationHistory = JSON.parse(savedHistory);
+                state.conversationHistory = JSON.parse(savedHistory);
                 renderConversationHistory();
             }
             
-            // Check if Web Speech API is available
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                initSpeechRecognition();
-            } else {
-                voiceBtn.disabled = true;
-                voiceBtn.title = "Speech recognition not supported in this browser";
-            }
-
-            // Enable demo mode by default
-            enableDemoMode();
+            // Update UI based on state
+            updateUIState();
         }
 
-        // Initialize speech recognition
-        function initSpeechRecognition() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = 'en-US';
-
-            recognition.onstart = function() {
-                isListening = true;
-                voiceBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Listening';
-                voiceBtn.classList.remove('btn-secondary');
-                voiceBtn.classList.add('btn-primary');
-                avatar.classList.add('listening');
-            };
-
-            recognition.onend = function() {
-                isListening = false;
-                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
-                voiceBtn.classList.remove('btn-primary');
-                voiceBtn.classList.add('btn-secondary');
-                avatar.classList.remove('listening');
-            };
-
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                chatInput.value = transcript;
-                sendMessage();
-            };
-
-            recognition.onerror = function(event) {
-                showNotification('Speech recognition error: ' + event.error, 'error');
-            };
+        // Initialize Particles Background
+        function initParticles() {
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                createParticle();
+            }
+            
+            console.log(`🎨 Created ${particleCount} background particles`);
         }
 
-        // Enable demo mode
-        function enableDemoMode() {
-            isDemoMode = true;
-            isConnected = true;
-            updateStatus('connected');
-            chatInput.disabled = false;
-            sendBtn.disabled = false;
-            voiceBtn.disabled = false;
-            connectBtn.innerHTML = '<i class="fas fa-plug"></i> Use Real AI';
-            demoBtn.innerHTML = '<i class="fas fa-check"></i> Demo Mode Active';
-            demoBtn.classList.add('btn-primary');
-            showNotification('Demo mode activated! You can now chat with simulated AI responses.', 'success');
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random size (2-5px)
+            const size = Math.random() * 3 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random position
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // Random color
+            const colors = [
+                'rgba(99, 102, 241, 0.4)',
+                'rgba(139, 92, 246, 0.3)',
+                'rgba(6, 182, 212, 0.3)',
+                'rgba(244, 63, 94, 0.2)'
+            ];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Random animation
+            const duration = Math.random() * 30 + 20;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            
+            particlesContainer.appendChild(particle);
+            
+            // Remove and recreate when animation ends
+            setTimeout(() => {
+                particle.remove();
+                createParticle();
+            }, duration * 1000);
+            
+            state.particles.push(particle);
         }
 
-        // Connect to AI API
-        connectBtn.addEventListener('click', async function() {
-            if (!isConnected || isDemoMode) {
-                // Switch from demo to real AI
-                if (isDemoMode) {
-                    isDemoMode = false;
-                    demoBtn.innerHTML = '<i class="fas fa-play"></i> Enable Demo Mode';
-                    demoBtn.classList.remove('btn-primary');
+        // Initialize Avatar Animations
+        function initAvatarAnimations() {
+            // Eye following cursor
+            document.addEventListener('mousemove', (e) => {
+                if (state.isAvatarTalking) return;
+                
+                const eyes = document.querySelectorAll('.eye');
+                const container = document.querySelector('.human-avatar-container');
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                const angleX = (e.clientX - centerX) / (rect.width / 2);
+                const angleY = (e.clientY - centerY) / (rect.height / 2);
+                
+                const maxOffset = 6;
+                const offsetX = angleX * maxOffset;
+                const offsetY = angleY * maxOffset;
+                
+                eyes.forEach(eye => {
+                    eye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                });
+                
+                // Blink occasionally
+                if (Math.random() > 0.99) {
+                    blinkEyes();
                 }
-
-                // Get API key from input or stored value
-                let key = apiKey;
-                if (apiKeyInput.value !== '••••••••••••••••') {
-                    key = apiKeyInput.value.trim();
-                    
-                    if (!key) {
-                        showNotification('Please enter an API key or use demo mode', 'error');
-                        enableDemoMode();
-                        return;
-                    }
-                    
-                    // Save API key
-                    apiKey = key;
-                    localStorage.setItem('nexa_free_api_key', key);
-                    apiKeyInput.value = '••••••••••••••••';
-                }
-
-                if (!apiKey) {
-                    showNotification('No API key found. Using demo mode instead.', 'info');
-                    enableDemoMode();
-                    return;
-                }
-
-                // Update status
-                updateStatus('connecting');
-                connectBtn.disabled = true;
-                connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
-
-                try {
-                    // Test the API key based on selected model
-                    const model = modelSelect.value;
-                    
-                    if (model === 'gemini') {
-                        // Test Gemini API
-                        const response = await axios.post(
-                            `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-                            {
-                                contents: [{
-                                    parts: [{
-                                        text: "Hello"
-                                    }]
-                                }]
-                            }
-                        );
-
-                        if (response.data.candidates && response.data.candidates[0]) {
-                            isConnected = true;
-                            updateStatus('connected');
-                            connectBtn.innerHTML = '<i class="fas fa-plug"></i> Disconnect';
-                            chatInput.disabled = false;
-                            sendBtn.disabled = false;
-                            voiceBtn.disabled = false;
-                            
-                            showNotification('Successfully connected to Google Gemini!', 'success');
-                            
-                            // Add welcome message
-                            addMessageToChat("Connected to Google Gemini! I'm now powered by real AI. How can I help you today?", 'ai');
-                        }
-                    } else if (model === 'cohere') {
-                        // Test Cohere API
-                        const response = await axios.post(
-                            'https://api.cohere.ai/v1/generate',
-                            {
-                                prompt: "Hello",
-                                max_tokens: 10
-                            },
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${apiKey}`,
-                                    'Content-Type': 'application/json'
-                                }
-                            }
-                        );
-
-                        if (response.data.generations) {
-                            isConnected = true;
-                            updateStatus('connected');
-                            connectBtn.innerHTML = '<i class="fas fa-plug"></i> Disconnect';
-                            chatInput.disabled = false;
-                            sendBtn.disabled = false;
-                            voiceBtn.disabled = false;
-                            
-                            showNotification('Successfully connected to Cohere AI!', 'success');
-                            
-                            // Add welcome message
-                            addMessageToChat("Connected to Cohere AI! Ready to assist you with intelligent conversations.", 'ai');
-                        }
-                    }
-                    
-                } catch (error) {
-                    updateStatus('disconnected');
-                    connectBtn.disabled = false;
-                    connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
-                    
-                    if (error.response) {
-                        showNotification(`API Error: ${error.response.data.error?.message || 'Invalid API key'}`, 'error');
-                    } else {
-                        showNotification('Network error. Please check your connection.', 'error');
-                    }
-                    
-                    // Fall back to demo mode
-                    showNotification('Switching to demo mode...', 'info');
-                    enableDemoMode();
-                }
-            } else {
-                // Disconnect
-                isConnected = false;
-                updateStatus('disconnected');
-                connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
-                chatInput.disabled = true;
-                sendBtn.disabled = true;
-                voiceBtn.disabled = true;
-                showNotification('Disconnected from AI service', 'success');
-            }
-        });
-
-        // Demo mode button
-        demoBtn.addEventListener('click', function() {
-            if (!isDemoMode) {
-                enableDemoMode();
-            }
-        });
-
-        // Send message function
-        async function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
+            });
             
-            // Add user message to chat
-            addMessageToChat(message, 'user');
-            chatInput.value = '';
-            chatInput.disabled = true;
-            sendBtn.disabled = true;
-            
-            // Add message to conversation history
-            conversationHistory.push({ role: 'user', content: message });
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            try {
-                let aiResponse;
-                
-                if (isDemoMode) {
-                    // Demo mode - simulated response
-                    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate thinking
-                    aiResponse = demoResponses[Math.floor(Math.random() * demoResponses.length)];
-                } else {
-                    // Real AI mode
-                    const model = modelSelect.value;
-                    
-                    if (model === 'gemini') {
-                        // Call Gemini API
-                        const response = await axios.post(
-                            `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-                            {
-                                contents: [{
-                                    parts: [{
-                                        text: message
-                                    }]
-                                }]
-                            }
-                        );
-                        
-                        aiResponse = response.data.candidates[0].content.parts[0].text;
-                    } else if (model === 'cohere') {
-                        // Call Cohere API
-                        const response = await axios.post(
-                            'https://api.cohere.ai/v1/generate',
-                            {
-                                prompt: message,
-                                max_tokens: 500
-                            },
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${apiKey}`,
-                                    'Content-Type': 'application/json'
-                                }
-                            }
-                        );
-                        
-                        aiResponse = response.data.generations[0].text;
-                    }
+            // Random blinking
+            state.blinkInterval = setInterval(() => {
+                if (Math.random() > 0.7 && !state.isAvatarTalking) {
+                    blinkEyes();
                 }
-                
-                // Add AI response to chat
-                removeTypingIndicator();
-                addMessageToChat(aiResponse, 'ai');
-                
-                // Add to conversation history
-                conversationHistory.push({ role: 'assistant', content: aiResponse });
-                
-                // Save conversation history
-                localStorage.setItem('nexa_free_conversation', JSON.stringify(conversationHistory));
-                
-                // Animate avatar
-                animateAvatarTalking(aiResponse.length * 50);
-                
-            } catch (error) {
-                removeTypingIndicator();
-                let errorMessage = 'Sorry, there was an error processing your request.';
-                
-                if (error.response) {
-                    if (error.response.status === 429) {
-                        errorMessage = 'Rate limit exceeded. Please wait a moment before trying again.';
-                    } else if (error.response.status === 401) {
-                        errorMessage = 'Authentication error. Please check your API key.';
-                        isConnected = false;
-                        updateStatus('disconnected');
-                        connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
-                        
-                        // Switch to demo mode
-                        showNotification('Switching to demo mode...', 'info');
-                        enableDemoMode();
-                    }
+            }, 3000);
+            
+            // Subtle eyebrow movements
+            state.expressionInterval = setInterval(() => {
+                if (!state.isAvatarTalking) {
+                    animateSubtleExpression();
                 }
-                
-                addMessageToChat(errorMessage, 'ai');
-            } finally {
-                chatInput.disabled = false;
-                sendBtn.disabled = false;
-                chatInput.focus();
-            }
+            }, 5000);
+            
+            console.log('👁️ Avatar animations initialized');
         }
 
-        // Voice input toggle
-        voiceBtn.addEventListener('click', function() {
-            if (!isConnected) {
-                showNotification('Please connect first', 'error');
-                return;
-            }
-            
-            if (!isListening) {
-                recognition.start();
-            } else {
-                recognition.stop();
-            }
-        });
-
-        // Clear chat
-        clearBtn.addEventListener('click', function() {
-            if (confirm('Are you sure you want to clear the chat history?')) {
-                conversationHistory = [];
-                chatMessages.innerHTML = '';
-                localStorage.removeItem('nexa_free_conversation');
-                
-                // Add initial messages
-                addMessageToChat("Chat cleared! How can I help you today?", 'ai');
-                if (isDemoMode) {
-                    addMessageToChat("Remember: You're in demo mode. Get a free API key for real AI responses!", 'ai');
-                }
-                showNotification('Chat history cleared', 'success');
-            }
-        });
-
-        // Send message on button click
-        sendBtn.addEventListener('click', sendMessage);
-
-        // Send message on Enter key
-        chatInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // Model selection change
-        modelSelect.addEventListener('change', function() {
-            selectedModel = this.value;
-            localStorage.setItem('nexa_free_model', selectedModel);
-            
-            if (selectedModel === 'demo') {
-                enableDemoMode();
-            } else {
-                isDemoMode = false;
-                demoBtn.innerHTML = '<i class="fas fa-play"></i> Enable Demo Mode';
-                demoBtn.classList.remove('btn-primary');
-                showNotification(`AI model changed to ${this.options[this.selectedIndex].text}`, 'success');
-            }
-        });
-
-        // API key input change
-        apiKeyInput.addEventListener('input', function() {
-            if (this.value !== '••••••••••••••••') {
-                isDemoMode = false;
-                demoBtn.innerHTML = '<i class="fas fa-play"></i> Enable Demo Mode';
-                demoBtn.classList.remove('btn-primary');
-                updateStatus('disconnected');
-                connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
-                chatInput.disabled = true;
-                sendBtn.disabled = true;
-                voiceBtn.disabled = true;
-            }
-        });
-
-        // Add message to chat
-        function addMessageToChat(message, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', `message-${sender}`);
-            
-            const senderDiv = document.createElement('div');
-            senderDiv.classList.add('message-sender');
-            senderDiv.textContent = sender === 'ai' ? 'Nexa AI' : 'You';
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.classList.add('message-content');
-            contentDiv.textContent = message;
-            
-            const actionsDiv = document.createElement('div');
-            actionsDiv.classList.add('message-actions');
-            
-            if (sender === 'ai') {
-                const copyBtn = document.createElement('button');
-                copyBtn.classList.add('action-btn');
-                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-                copyBtn.onclick = () => {
-                    navigator.clipboard.writeText(message);
-                    showNotification('Message copied to clipboard', 'success');
-                };
-                
-                const speakBtn = document.createElement('button');
-                speakBtn.classList.add('action-btn');
-                speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> Speak';
-                speakBtn.onclick = () => speakText(message);
-                
-                actionsDiv.appendChild(copyBtn);
-                actionsDiv.appendChild(speakBtn);
-            }
-            
-            messageDiv.appendChild(senderDiv);
-            messageDiv.appendChild(contentDiv);
-            messageDiv.appendChild(actionsDiv);
-            
-            chatMessages.appendChild(messageDiv);
-            scrollChatToBottom();
-        }
-
-        // Render conversation history
-        function renderConversationHistory() {
-            chatMessages.innerHTML = '';
-            conversationHistory.forEach(msg => {
-                addMessageToChat(msg.content, msg.role === 'user' ? 'user' : 'ai');
+        function blinkEyes() {
+            const eyes = document.querySelectorAll('.eye');
+            eyes.forEach(eye => {
+                eye.style.height = '2px';
+                setTimeout(() => {
+                    eye.style.height = '44px';
+                }, 150);
             });
         }
 
-        // Show typing indicator
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.classList.add('message', 'message-ai');
-            typingDiv.id = 'typingIndicator';
+        function animateSubtleExpression() {
+            const eyebrows = document.querySelectorAll('.eyebrow');
+            const mouthElement = document.getElementById('mouth');
             
-            const senderDiv = document.createElement('div');
-            senderDiv.classList.add('message-sender');
-            senderDiv.textContent = 'Nexa AI';
+            // Random eyebrow movement
+            eyebrows.forEach(eyebrow => {
+                const rotation = (Math.random() * 10) - 5;
+                eyebrow.style.transform = `rotate(${rotation}deg)`;
+            });
             
-            const contentDiv = document.createElement('div');
-            contentDiv.classList.add('message-content');
-            
-            const typingContainer = document.createElement('div');
-            typingContainer.classList.add('typing-indicator');
-            
-            for (let i = 0; i < 3; i++) {
-                const dot = document.createElement('div');
-                dot.classList.add('typing-dot');
-                typingContainer.appendChild(dot);
+            // Subtle mouth movement
+            if (Math.random() > 0.5) {
+                mouthElement.style.height = '18px';
+                setTimeout(() => {
+                    if (!state.isAvatarTalking) {
+                        mouthElement.style.height = '22px';
+                    }
+                }, 300);
             }
-            
-            contentDiv.appendChild(typingContainer);
-            typingDiv.appendChild(senderDiv);
-            typingDiv.appendChild(contentDiv);
-            
-            chatMessages.appendChild(typingDiv);
-            scrollChatToBottom();
         }
 
-        // Remove typing indicator
+        // Initialize Speech Recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                state.recognition = new SpeechRecognition();
+                state.recognition.continuous = false;
+                state.recognition.interimResults = true;
+                state.recognition.lang = 'en-US';
+                state.recognition.maxAlternatives = 1;
+                
+                state.recognition.onstart = () => {
+                    state.isListening = true;
+                    voiceBtn.classList.add('listening');
+                    voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                    statusText.textContent = 'Listening... Speak now';
+                    showNotification('Voice Input Active', 'I\'m listening. Speak clearly into your microphone.', 'info');
+                    
+                    // Animate avatar while listening
+                    mouth.classList.add('talking');
+                };
+                
+                state.recognition.onresult = (event) => {
+                    let finalTranscript = '';
+                    let interimTranscript = '';
+                    
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript;
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+                    
+                    // Update input with interim results
+                    if (interimTranscript) {
+                        chatInput.value = interimTranscript;
+                        chatInput.focus();
+                    }
+                    
+                    // If we have final results, send the message
+                    if (finalTranscript) {
+                        chatInput.value = finalTranscript;
+                        sendMessage();
+                    }
+                };
+                
+                state.recognition.onend = () => {
+                    state.isListening = false;
+                    voiceBtn.classList.remove('listening');
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                    statusText.textContent = 'Premium Demo Mode';
+                    mouth.classList.remove('talking');
+                };
+                
+                state.recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    showNotification('Voice Input Error', `Error: ${event.error}. Please try again.`, 'error');
+                    voiceBtn.classList.remove('listening');
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                    statusText.textContent = 'Premium Demo Mode';
+                };
+                
+                console.log('🎤 Speech recognition initialized');
+            } else {
+                console.warn('Speech recognition not supported');
+                voiceBtn.style.opacity = '0.5';
+                voiceBtn.title = "Voice input not supported in this browser";
+                showNotification('Feature Not Available', 'Voice recognition is not supported in your browser.', 'warning');
+            }
+        }
+
+        // Initialize Tooltips
+        function initTooltips() {
+            const tooltipElements = document.querySelectorAll('[data-tooltip]');
+            
+            tooltipElements.forEach(element => {
+                element.addEventListener('mouseenter', (e) => {
+                    const tooltipText = element.getAttribute('data-tooltip');
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip';
+                    tooltip.textContent = tooltipText;
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.background = 'var(--glass-dark)';
+                    tooltip.style.color = 'white';
+                    tooltip.style.padding = '8px 12px';
+                    tooltip.style.borderRadius = '8px';
+                    tooltip.style.fontSize = '12px';
+                    tooltip.style.whiteSpace = 'nowrap';
+                    tooltip.style.zIndex = '1000';
+                    tooltip.style.backdropFilter = 'blur(10px)';
+                    tooltip.style.border = '1px solid var(--glass-border)';
+                    tooltip.style.boxShadow = 'var(--shadow-light)';
+                    tooltip.style.pointerEvents = 'none';
+                    
+                    document.body.appendChild(tooltip);
+                    
+                    const rect = element.getBoundingClientRect();
+                    tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+                    tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
+                    
+                    element._tooltip = tooltip;
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    if (element._tooltip) {
+                        element._tooltip.remove();
+                        delete element._tooltip;
+                    }
+                });
+            });
+            
+            console.log('💡 Tooltips initialized');
+        }
+
+        // Initialize Navigation
+        function initNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    link.classList.add('active');
+                    
+                    // Show notification
+                    const text = link.textContent.trim();
+                    showNotification('Navigation', `Navigating to ${text}`, 'info');
+                    
+                    // Add click animation
+                    link.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        link.style.transform = '';
+                    }, 150);
+                });
+            });
+            
+            // Logo click effect
+            logo.addEventListener('click', () => {
+                logo.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    logo.style.transform = '';
+                }, 150);
+                
+                showNotification('Nexa AI', 'Welcome to premium AI assistant experience', 'info');
+            });
+            
+            console.log('🧭 Navigation initialized');
+        }
+
+        // Initialize Welcome Messages
+        function initWelcomeMessages() {
+            const welcomeMessage = welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
+            addMessage(welcomeMessage, 'ai');
+            
+            // Add a follow-up suggestion
+            setTimeout(() => {
+                addMessage("Try asking me about AI capabilities, request coding help, or explore creative writing!", 'ai');
+            }, 500);
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Send message
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Voice input
+            voiceBtn.addEventListener('click', toggleVoiceInput);
+            
+            // Control cards
+            demoControl.addEventListener('click', () => activateControl('demo'));
+            voiceControl.addEventListener('click', () => activateControl('voice'));
+            apiControl.addEventListener('click', () => activateControl('api'));
+            settingsControl.addEventListener('click', () => activateControl('settings'));
+            
+            // Status action
+            statusAction.addEventListener('click', handleStatusAction);
+            
+            // API key visibility toggle
+            toggleApiKey.addEventListener('click', toggleApiKeyVisibility);
+            
+            // Model selection
+            modelSelect.addEventListener('change', handleModelChange);
+            
+            // API key input
+            apiKeyInput.addEventListener('input', handleApiKeyInput);
+            
+            // Notification close
+            notificationClose.addEventListener('click', closeNotification);
+            
+            // API option clicks
+            geminiOption.addEventListener('click', (e) => {
+                e.preventDefault();
+                showNotification('Google Gemini', 'Opening Google AI Studio to get your free API key...', 'info');
+                setTimeout(() => {
+                    window.open('https://makersuite.google.com/app/apikey', '_blank');
+                }, 500);
+            });
+            
+            cohereOption.addEventListener('click', (e) => {
+                e.preventDefault();
+                showNotification('Cohere API', 'Opening Cohere dashboard to get your free API key...', 'info');
+                setTimeout(() => {
+                    window.open('https://dashboard.cohere.com/api-keys', '_blank');
+                }, 500);
+            });
+            
+            // Input focus effects
+            chatInput.addEventListener('focus', () => {
+                chatInput.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            chatInput.addEventListener('blur', () => {
+                chatInput.parentElement.style.transform = '';
+            });
+            
+            console.log('🎮 Event listeners setup complete');
+        }
+
+        // Send Message
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message || state.isTyping) return;
+            
+            // Clear input
+            chatInput.value = '';
+            
+            // Add user message
+            addMessage(message, 'user');
+            
+            // Add to conversation history
+            state.conversationHistory.push({
+                role: 'user',
+                content: message,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Show typing indicator
+            showTypingIndicator();
+            state.isTyping = true;
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
+            
+            // Simulate AI thinking
+            await simulateAIThinking();
+            
+            // Remove typing indicator
+            removeTypingIndicator();
+            state.isTyping = false;
+            
+            // Generate AI response
+            const aiResponse = generateAIResponse(message);
+            
+            // Add AI response
+            addMessage(aiResponse, 'ai');
+            
+            // Animate avatar while talking
+            animateAvatarTalking(aiResponse.length);
+            
+            // Add to conversation history
+            state.conversationHistory.push({
+                role: 'assistant',
+                content: aiResponse,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Save conversation history
+            localStorage.setItem('nexa_premium_conversation_history', JSON.stringify(state.conversationHistory));
+            
+            // Re-enable input
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            chatInput.focus();
+            
+            // Show notification for long responses
+            if (aiResponse.length > 200) {
+                showNotification('Response Generated', 'AI has provided a detailed response to your query.', 'success');
+            }
+        }
+
+        // Simulate AI Thinking
+        function simulateAIThinking() {
+            return new Promise(resolve => {
+                // Variable delay based on message complexity
+                const baseDelay = 1000;
+                const complexityDelay = Math.min(3000, state.conversationHistory.length * 200);
+                const totalDelay = baseDelay + complexityDelay + Math.random() * 1000;
+                
+                setTimeout(resolve, totalDelay);
+            });
+        }
+
+        // Generate AI Response
+        function generateAIResponse(userMessage) {
+            if (state.isDemoMode) {
+                // Demo mode - enhanced simulated responses
+                const responseType = Math.floor(Math.random() * demoResponses.length);
+                const baseResponse = demoResponses[responseType];
+                
+                // Add personalized touch
+                const personalizedResponses = [
+                    `Based on your question about "${userMessage.substring(0, 30)}...", ${baseResponse.text.toLowerCase()}`,
+                    `Regarding "${userMessage.substring(0, 25)}...", ${baseResponse.text.toLowerCase()}`,
+                    `${baseResponse.text} This demonstrates how I would respond to questions like "${userMessage.substring(0, 20)}..."`
+                ];
+                
+                return personalizedResponses[Math.floor(Math.random() * personalizedResponses.length)];
+            } else {
+                // Real AI mode (placeholder for API integration)
+                return "Real AI response would be generated here with API integration. Connect an API key to unlock this feature.";
+            }
+        }
+
+        // Add Message to Chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+            });
+            
+            const messageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            messageDiv.id = messageId;
+            
+            // Format message with line breaks for better readability
+            const formattedText = text.replace(/\n/g, '<br>');
+            
+            messageDiv.innerHTML = `
+                ${sender === 'ai' ? `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                ` : ''}
+                
+                <div class="message-bubble">${formattedText}</div>
+                
+                ${sender === 'user' ? `
+                    <div class="message-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                ` : ''}
+                
+                <span class="message-time">
+                    <i class="far fa-clock"></i> ${time}
+                </span>
+                
+                <div class="message-actions">
+                    <button class="message-action" onclick="copyMessage('${messageId}')" title="Copy message">
+                        <i class="far fa-copy"></i>
+                    </button>
+                    ${sender === 'ai' ? `
+                        <button class="message-action" onclick="speakMessage('${messageId}')" title="Speak message">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // Smooth scroll to new message
+            messageDiv.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'end' 
+            });
+            
+            // Add animation
+            messageDiv.style.animation = 'messageSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+
+        // Copy Message Function
+        window.copyMessage = function(messageId) {
+            const messageDiv = document.getElementById(messageId);
+            const messageText = messageDiv.querySelector('.message-bubble').textContent;
+            
+            navigator.clipboard.writeText(messageText).then(() => {
+                showNotification('Copied!', 'Message copied to clipboard', 'success');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showNotification('Error', 'Failed to copy message', 'error');
+            });
+        };
+
+        // Speak Message Function
+        window.speakMessage = function(messageId) {
+            const messageDiv = document.getElementById(messageId);
+            const messageText = messageDiv.querySelector('.message-bubble').textContent;
+            
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(messageText);
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                utterance.lang = 'en-US';
+                
+                // Animate avatar while speaking
+                animateAvatarTalking(messageText.length);
+                
+                utterance.onend = () => {
+                    console.log('Speech synthesis finished');
+                };
+                
+                speechSynthesis.speak(utterance);
+            } else {
+                showNotification('Not Supported', 'Text-to-speech not supported in this browser', 'error');
+            }
+        };
+
+        // Show Typing Indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai';
+            typingDiv.id = 'typingIndicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Remove Typing Indicator
         function removeTypingIndicator() {
             const typingIndicator = document.getElementById('typingIndicator');
             if (typingIndicator) {
@@ -1348,73 +2932,248 @@
             }
         }
 
-        // Scroll chat to bottom
-        function scrollChatToBottom() {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // Animate avatar talking
-        function animateAvatarTalking(duration = 2000) {
-            avatar.classList.add('talking');
+        // Animate Avatar Talking
+        function animateAvatarTalking(durationFactor) {
+            if (state.isAvatarTalking) return;
+            
+            state.isAvatarTalking = true;
+            mouth.classList.add('talking');
+            
+            // Calculate duration based on text length
+            const duration = Math.min(5000, Math.max(1000, durationFactor * 10));
+            
+            // Animate eyes slightly during speech
+            const eyes = document.querySelectorAll('.eye');
+            eyes.forEach(eye => {
+                eye.style.transform = 'translate(0, 2px)';
+            });
+            
             setTimeout(() => {
-                avatar.classList.remove('talking');
+                mouth.classList.remove('talking');
+                state.isAvatarTalking = false;
+                
+                // Reset eyes
+                eyes.forEach(eye => {
+                    eye.style.transform = '';
+                });
             }, duration);
         }
 
-        // Update connection status
-        function updateStatus(status) {
-            statusDot.className = 'status-dot';
-            switch (status) {
-                case 'connected':
-                    statusDot.classList.add('connected');
-                    statusText.textContent = isDemoMode ? 'Demo Mode' : 'Connected';
-                    statusDot.style.background = isDemoMode ? '#f59e0b' : '#4ade80';
+        // Toggle Voice Input
+        function toggleVoiceInput() {
+            if (!state.recognition) {
+                showNotification('Not Supported', 'Voice recognition not available', 'error');
+                return;
+            }
+            
+            if (!state.isListening) {
+                try {
+                    state.recognition.start();
+                } catch (error) {
+                    console.error('Speech recognition start error:', error);
+                    showNotification('Microphone Error', 'Could not access microphone. Please check permissions.', 'error');
+                }
+            } else {
+                state.recognition.stop();
+            }
+        }
+
+        // Activate Control
+        function activateControl(control) {
+            // Remove active class from all controls
+            [demoControl, voiceControl, apiControl, settingsControl].forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to selected control
+            switch(control) {
+                case 'demo':
+                    demoControl.classList.add('active');
+                    state.activeControl = 'demo';
+                    showNotification('Demo Mode', 'Try the AI assistant without any setup. Ask me anything!', 'info');
                     break;
-                case 'connecting':
-                    statusDot.classList.add('connecting');
-                    statusText.textContent = 'Connecting...';
-                    statusDot.style.background = '#f59e0b';
+                    
+                case 'voice':
+                    voiceControl.classList.add('active');
+                    state.activeControl = 'voice';
+                    if (state.recognition) {
+                        showNotification('Voice Chat', 'Click the microphone button to start speaking.', 'info');
+                    }
                     break;
-                case 'disconnected':
-                    statusDot.classList.add('disconnected');
-                    statusText.textContent = 'Disconnected';
-                    statusDot.style.background = '#ef4444';
+                    
+                case 'api':
+                    apiControl.classList.add('active');
+                    state.activeControl = 'api';
+                    showNotification('API Setup', 'Configure your API settings or get a free API key.', 'info');
+                    break;
+                    
+                case 'settings':
+                    settingsControl.classList.add('active');
+                    state.activeControl = 'settings';
+                    showNotification('Settings', 'Customize your AI assistant experience.', 'info');
                     break;
             }
         }
 
-        // Show notification
-        function showNotification(message, type = 'info') {
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
+        // Handle Status Action
+        function handleStatusAction() {
+            if (state.isDemoMode) {
+                showNotification('Connect API', 'Switch from demo mode to real AI by connecting an API key.', 'info');
+                activateControl('api');
+                apiKeyInput.focus();
+            } else {
+                showNotification('Disconnect', 'Switching back to demo mode...', 'info');
+                state.isDemoMode = true;
+                updateUIState();
+            }
+        }
+
+        // Toggle API Key Visibility
+        function toggleApiKeyVisibility() {
+            if (apiKeyInput.type === 'password') {
+                apiKeyInput.type = 'text';
+                toggleApiKey.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                toggleApiKey.title = 'Hide API key';
+            } else {
+                apiKeyInput.type = 'password';
+                toggleApiKey.innerHTML = '<i class="fas fa-eye"></i>';
+                toggleApiKey.title = 'Show API key';
+            }
+        }
+
+        // Handle Model Change
+        function handleModelChange() {
+            state.selectedModel = modelSelect.value;
+            localStorage.setItem('nexa_premium_model', state.selectedModel);
+            
+            const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+            showNotification('Model Changed', `Selected: ${selectedOption.text}`, 'success');
+            
+            if (state.selectedModel === 'demo') {
+                state.isDemoMode = true;
+                updateUIState();
+            }
+        }
+
+        // Handle API Key Input
+        function handleApiKeyInput() {
+            const value = apiKeyInput.value;
+            
+            if (value && !value.startsWith('••••••••••••••••')) {
+                state.apiKey = value;
+                localStorage.setItem('nexa_premium_api_key', value);
+                
+                if (value.length > 10) {
+                    showNotification('API Key Saved', 'API key has been saved locally.', 'success');
+                }
+            }
+        }
+
+        // Update UI State
+        function updateUIState() {
+            if (state.isDemoMode) {
+                statusText.textContent = 'Premium Demo Mode';
+                statusAction.textContent = 'Connect API';
+                chatInput.placeholder = 'Ask me anything in demo mode...';
+            } else {
+                statusText.textContent = 'API Connected';
+                statusAction.textContent = 'Disconnect';
+                chatInput.placeholder = 'Ask me anything with real AI...';
+            }
+            
+            // Update control states
+            demoControl.classList.toggle('active', state.isDemoMode);
+            apiControl.classList.toggle('active', !state.isDemoMode);
+        }
+
+        // Show Notification
+        function showNotification(title, message, type = 'info') {
+            const notificationId = Date.now();
+            
+            state.notificationQueue.push({
+                id: notificationId,
+                title,
+                message,
+                type
+            });
+            
+            processNotificationQueue();
+        }
+
+        function processNotificationQueue() {
+            if (state.isNotificationShowing || state.notificationQueue.length === 0) {
+                return;
+            }
+            
+            state.isNotificationShowing = true;
+            const notif = state.notificationQueue.shift();
+            
+            // Update notification content
+            notificationTitle.textContent = notif.title;
+            notificationMessage.textContent = notif.message;
+            
+            // Set type
+            notification.className = `notification ${notif.type}`;
+            const icon = notification.querySelector('.notification-icon i');
+            
+            switch(notif.type) {
+                case 'success':
+                    icon.className = 'fas fa-check-circle';
+                    break;
+                case 'error':
+                    icon.className = 'fas fa-exclamation-circle';
+                    break;
+                case 'warning':
+                    icon.className = 'fas fa-exclamation-triangle';
+                    break;
+                default:
+                    icon.className = 'fas fa-info-circle';
+            }
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Auto-hide after delay
+            setTimeout(() => {
+                closeNotification();
+            }, 5000);
+        }
+
+        function closeNotification() {
+            notification.classList.remove('show');
             
             setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+                state.isNotificationShowing = false;
+                processNotificationQueue();
+            }, 500);
         }
 
-        // Text-to-speech function
-        function speakText(text) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.rate = 1.0;
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
-                
-                // Animate avatar while speaking
-                avatar.classList.add('talking');
-                utterance.onend = () => {
-                    avatar.classList.remove('talking');
-                };
-                
-                speechSynthesis.speak(utterance);
-            } else {
-                showNotification('Text-to-speech not supported in this browser', 'error');
-            }
+        // Render Conversation History
+        function renderConversationHistory() {
+            chatMessages.innerHTML = '';
+            
+            state.conversationHistory.forEach(msg => {
+                addMessage(msg.content, msg.role === 'user' ? 'user' : 'ai');
+            });
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Initialize the application
-        init();
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Export useful functions to global scope
+        window.NexaAI = {
+            sendMessage,
+            toggleVoiceInput,
+            showNotification,
+            copyMessage,
+            speakMessage,
+            state
+        };
+
+        console.log('✨ Nexa AI Premium JavaScript loaded successfully');
     </script>
 </body>
 </html>
