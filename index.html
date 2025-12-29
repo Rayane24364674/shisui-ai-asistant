@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa AI Assistant - Free Version</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        /* [Keep all the previous CSS styles - they remain the same] */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #4cc9f0;
+        }
+
+        .logo i {
+            color: #4361ee;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 17px;
+        }
+
+        nav a:hover {
+            color: #4cc9f0;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 40px;
+            align-items: flex-start;
+        }
+
+        .avatar-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .avatar-container {
+            position: relative;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 15px 35px rgba(67, 97, 238, 0.4);
+            overflow: hidden;
+        }
+
+        .avatar-face {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        .avatar-eye {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 40px;
+        }
+
+        .eye-left {
+            left: 30px;
+        }
+
+        .eye-right {
+            right: 30px;
+        }
+
+        .avatar-eye::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #16213e;
+            border-radius: 50%;
+            top: 6px;
+            left: 6px;
+        }
+
+        .avatar-mouth {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            border-bottom: 8px solid white;
+            border-radius: 0 0 50px 50px;
+            bottom: 30px;
+            left: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .talking .avatar-mouth {
+            animation: talk 0.5s infinite alternate;
+        }
+
+        .avatar-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .api-key-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .api-key-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 14px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+
+        .api-key-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .api-key-info {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .free-api-options {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(67, 97, 238, 0.3);
+        }
+
+        .free-api-options h4 {
+            color: #4cc9f0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .free-api-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .free-api-link {
+            color: #4cc9f0;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .free-api-link:hover {
+            background: rgba(76, 201, 240, 0.1);
+        }
+
+        .free-api-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .model-selector {
+            margin-top: 15px;
+        }
+
+        .model-select {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .model-select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .chat-section {
+            flex: 2;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header h2 {
+            font-size: 24px;
+            color: #4cc9f0;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80;
+        }
+
+        .status-dot.disconnected {
+            background: #ef4444;
+        }
+
+        .status-dot.connecting {
+            background: #f59e0b;
+            animation: pulse 1.5s infinite;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-user {
+            align-items: flex-end;
+        }
+
+        .message-content {
+            max-width: 80%;
+            padding: 15px;
+            border-radius: 18px;
+            line-height: 1.5;
+        }
+
+        .message-ai .message-content {
+            background: rgba(67, 97, 238, 0.2);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            border-top-left-radius: 5px;
+        }
+
+        .message-user .message-content {
+            background: rgba(76, 201, 240, 0.2);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            border-top-right-radius: 5px;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: #4361ee;
+        }
+
+        .chat-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .features {
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #4cc9f0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #4361ee;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes talk {
+            0% { height: 20px; border-radius: 0 0 50px 50px; }
+            100% { height: 10px; border-radius: 0 0 30px 30px; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .logo span {
+                font-size: 22px;
+            }
+            
+            .avatar-controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(67, 97, 238, 0.5);
+            border-radius: 10px;
+        }
+
+        .voice-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .listening .voice-animation {
+            animation: voicePulse 1.5s infinite;
+        }
+
+        @keyframes voicePulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
+                opacity: 1;
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(67, 97, 238, 0);
+                opacity: 0.7;
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+                opacity: 0;
+            }
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4361ee;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #4cc9f0;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .action-btn:hover {
+            background: rgba(76, 201, 240, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #4361ee;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: #ef4444;
+        }
+
+        .notification.success {
+            border-left-color: #4ade80;
+        }
+
+        .notification.info {
+            border-left-color: #3b82f6;
+        }
+
+        .demo-mode {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .demo-btn {
+            width: 100%;
+            margin-top: 10px;
+            background: linear-gradient(to right, #f59e0b, #d97706);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <span>Nexa AI - Free</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-key"></i> Get Free Key</a></li>
+                    <li><a href="#"><i class="fas fa-heart"></i> Support</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="main-content">
+            <section class="avatar-section">
+                <h2>Free AI Assistant</h2>
+                <div class="avatar-container">
+                    <div class="avatar" id="avatar">
+                        <div class="voice-animation"></div>
+                        <div class="avatar-face">
+                            <div class="avatar-eye eye-left"></div>
+                            <div class="avatar-eye eye-right"></div>
+                            <div class="avatar-mouth"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="avatar-info">
+                    <h3>Nexa Free</h3>
+                    <p>Your intelligent AI assistant powered by free AI APIs. No credit card required!</p>
+                </div>
+                
+                <div class="api-key-container">
+                    <label for="apiKey">AI API Key (Optional):</label>
+                    <input type="password" id="apiKey" class="api-key-input" placeholder="Enter Gemini/Cohere/OpenAI key">
+                    <div class="api-key-info">
+                        <i class="fas fa-info-circle"></i>
+                        Leave empty for demo mode, or use a free API key for real AI
+                    </div>
+                </div>
+
+                <div class="free-api-options">
+                    <h4><i class="fas fa-gift"></i> Get Free API Keys</h4>
+                    <div class="free-api-links">
+                        <a href="https://makersuite.google.com/app/apikey" target="_blank" class="free-api-link">
+                            <i class="fab fa-google"></i> Google Gemini (Recommended - 60 RPM free)
+                        </a>
+                        <a href="https://dashboard.cohere.com/api-keys" target="_blank" class="free-api-link">
+                            <i class="fas fa-key"></i> Cohere API (Free tier available)
+                        </a>
+                        <a href="https://platform.openai.com/api-keys" target="_blank" class="free-api-link">
+                            <i class="fas fa-brain"></i> OpenAI ($5 free credit)
+                        </a>
+                    </div>
+                </div>
+
+                <div class="model-selector">
+                    <label for="modelSelect">AI Model:</label>
+                    <select id="modelSelect" class="model-select">
+                        <option value="gemini">Google Gemini (Recommended)</option>
+                        <option value="cohere">Cohere Command</option>
+                        <option value="demo">Demo Mode (No API needed)</option>
+                    </select>
+                </div>
+
+                <div class="demo-mode">
+                    <p><i class="fas fa-play-circle"></i> <strong>Demo Mode:</strong> Try without an API key using simulated responses</p>
+                    <button class="btn demo-btn" id="demoBtn">
+                        <i class="fas fa-play"></i> Enable Demo Mode
+                    </button>
+                </div>
+
+                <div class="avatar-controls">
+                    <button class="btn btn-primary" id="connectBtn">
+                        <i class="fas fa-plug"></i> Connect AI
+                    </button>
+                    <button class="btn btn-secondary" id="voiceBtn" disabled>
+                        <i class="fas fa-microphone"></i> Voice Input
+                    </button>
+                    <button class="btn btn-secondary" id="clearBtn">
+                        <i class="fas fa-trash"></i> Clear Chat
+                    </button>
+                </div>
+            </section>
+
+            <section class="chat-section">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h2>Chat with Nexa</h2>
+                        <div class="status">
+                            <div class="status-dot disconnected" id="statusDot"></div>
+                            <span id="statusText">Ready for Demo</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message message-ai">
+                            <div class="message-sender">Nexa AI</div>
+                            <div class="message-content">Hello! I'm Nexa, your free AI assistant. You can use me in <strong>demo mode</strong> or connect a free API key for real AI responses. Click "Enable Demo Mode" to start chatting instantly!</div>
+                        </div>
+                        <div class="message message-ai">
+                            <div class="message-sender">Nexa AI</div>
+                            <div class="message-content">For the best free experience, get a <strong>Google Gemini API key</strong> (60 requests per minute free). It's completely free and gives you access to advanced AI capabilities!</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here..." disabled>
+                        <button class="send-btn" id="sendBtn" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="features">
+            <h2>100% Free AI Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <h3>Gemini API</h3>
+                    <p>Free 60 requests per minute with Google's Gemini API. No credit card required!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Demo Mode</h3>
+                    <p>Try instantly without any API key. Perfect for testing and demonstrations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Real Conversations</h3>
+                    <p>Natural dialogue with context memory and intelligent responses.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Code Help</h3>
+                    <p>Get help with programming, debugging, and learning to code.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Nexa AI Assistant - Free Version</p>
+            <p>This assistant works with free AI APIs. No subscription fees ever!</p>
+        </div>
+    </footer>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // DOM Elements
+        const avatar = document.getElementById('avatar');
+        const connectBtn = document.getElementById('connectBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const apiKeyInput = document.getElementById('apiKey');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const modelSelect = document.getElementById('modelSelect');
+        const demoBtn = document.getElementById('demoBtn');
+        const notification = document.getElementById('notification');
+
+        // State variables
+        let isConnected = false;
+        let isListening = false;
+        let isDemoMode = false;
+        let apiKey = localStorage.getItem('nexa_free_api_key') || '';
+        let selectedModel = localStorage.getItem('nexa_free_model') || 'demo';
+        let conversationHistory = [];
+        let recognition = null;
+
+        // Demo responses (simulated AI)
+        const demoResponses = [
+            "I understand your question! In a real AI system, I would provide a detailed answer based on the latest information available. Since this is demo mode, I'm showing you what real AI responses would look like.",
+            "That's an interesting point! A real AI assistant would analyze your query and provide helpful insights. I can simulate various responses including explanations, creative writing, or problem-solving.",
+            "Great question! While I'm in demo mode, I can show you how I would respond. I can help with learning, coding, writing, research, and general knowledge questions.",
+            "Thanks for asking! In full AI mode with an API key, I could access real-time information and provide accurate, detailed responses to your queries.",
+            "I appreciate your curiosity! This demo shows the interface capabilities. With a free Google Gemini API key, you'd get real AI responses with 60 free requests per minute.",
+            "That's something I can help with! A real AI would process your request and generate a helpful response. Try getting a free API key to experience full functionality.",
+            "Interesting topic! I'm designed to assist with a wide range of subjects. The demo mode gives you a preview, while real API access enables comprehensive assistance."
+        ];
+
+        // Initialize
+        function init() {
+            // Load saved settings
+            if (apiKey) {
+                apiKeyInput.value = '••••••••••••••••';
+            }
+            modelSelect.value = selectedModel;
+            
+            // Load conversation history
+            const savedHistory = localStorage.getItem('nexa_free_conversation');
+            if (savedHistory) {
+                conversationHistory = JSON.parse(savedHistory);
+                renderConversationHistory();
+            }
+            
+            // Check if Web Speech API is available
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                initSpeechRecognition();
+            } else {
+                voiceBtn.disabled = true;
+                voiceBtn.title = "Speech recognition not supported in this browser";
+            }
+
+            // Enable demo mode by default
+            enableDemoMode();
+        }
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = function() {
+                isListening = true;
+                voiceBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Listening';
+                voiceBtn.classList.remove('btn-secondary');
+                voiceBtn.classList.add('btn-primary');
+                avatar.classList.add('listening');
+            };
+
+            recognition.onend = function() {
+                isListening = false;
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
+                voiceBtn.classList.remove('btn-primary');
+                voiceBtn.classList.add('btn-secondary');
+                avatar.classList.remove('listening');
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                chatInput.value = transcript;
+                sendMessage();
+            };
+
+            recognition.onerror = function(event) {
+                showNotification('Speech recognition error: ' + event.error, 'error');
+            };
+        }
+
+        // Enable demo mode
+        function enableDemoMode() {
+            isDemoMode = true;
+            isConnected = true;
+            updateStatus('connected');
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            voiceBtn.disabled = false;
+            connectBtn.innerHTML = '<i class="fas fa-plug"></i> Use Real AI';
+            demoBtn.innerHTML = '<i class="fas fa-check"></i> Demo Mode Active';
+            demoBtn.classList.add('btn-primary');
+            showNotification('Demo mode activated! You can now chat with simulated AI responses.', 'success');
+        }
+
+        // Connect to AI API
+        connectBtn.addEventListener('click', async function() {
+            if (!isConnected || isDemoMode) {
+                // Switch from demo to real AI
+                if (isDemoMode) {
+                    isDemoMode = false;
+                    demoBtn.innerHTML = '<i class="fas fa-play"></i> Enable Demo Mode';
+                    demoBtn.classList.remove('btn-primary');
+                }
+
+                // Get API key from input or stored value
+                let key = apiKey;
+                if (apiKeyInput.value !== '••••••••••••••••') {
+                    key = apiKeyInput.value.trim();
+                    
+                    if (!key) {
+                        showNotification('Please enter an API key or use demo mode', 'error');
+                        enableDemoMode();
+                        return;
+                    }
+                    
+                    // Save API key
+                    apiKey = key;
+                    localStorage.setItem('nexa_free_api_key', key);
+                    apiKeyInput.value = '••••••••••••••••';
+                }
+
+                if (!apiKey) {
+                    showNotification('No API key found. Using demo mode instead.', 'info');
+                    enableDemoMode();
+                    return;
+                }
+
+                // Update status
+                updateStatus('connecting');
+                connectBtn.disabled = true;
+                connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+
+                try {
+                    // Test the API key based on selected model
+                    const model = modelSelect.value;
+                    
+                    if (model === 'gemini') {
+                        // Test Gemini API
+                        const response = await axios.post(
+                            `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+                            {
+                                contents: [{
+                                    parts: [{
+                                        text: "Hello"
+                                    }]
+                                }]
+                            }
+                        );
+
+                        if (response.data.candidates && response.data.candidates[0]) {
+                            isConnected = true;
+                            updateStatus('connected');
+                            connectBtn.innerHTML = '<i class="fas fa-plug"></i> Disconnect';
+                            chatInput.disabled = false;
+                            sendBtn.disabled = false;
+                            voiceBtn.disabled = false;
+                            
+                            showNotification('Successfully connected to Google Gemini!', 'success');
+                            
+                            // Add welcome message
+                            addMessageToChat("Connected to Google Gemini! I'm now powered by real AI. How can I help you today?", 'ai');
+                        }
+                    } else if (model === 'cohere') {
+                        // Test Cohere API
+                        const response = await axios.post(
+                            'https://api.cohere.ai/v1/generate',
+                            {
+                                prompt: "Hello",
+                                max_tokens: 10
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${apiKey}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+
+                        if (response.data.generations) {
+                            isConnected = true;
+                            updateStatus('connected');
+                            connectBtn.innerHTML = '<i class="fas fa-plug"></i> Disconnect';
+                            chatInput.disabled = false;
+                            sendBtn.disabled = false;
+                            voiceBtn.disabled = false;
+                            
+                            showNotification('Successfully connected to Cohere AI!', 'success');
+                            
+                            // Add welcome message
+                            addMessageToChat("Connected to Cohere AI! Ready to assist you with intelligent conversations.", 'ai');
+                        }
+                    }
+                    
+                } catch (error) {
+                    updateStatus('disconnected');
+                    connectBtn.disabled = false;
+                    connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
+                    
+                    if (error.response) {
+                        showNotification(`API Error: ${error.response.data.error?.message || 'Invalid API key'}`, 'error');
+                    } else {
+                        showNotification('Network error. Please check your connection.', 'error');
+                    }
+                    
+                    // Fall back to demo mode
+                    showNotification('Switching to demo mode...', 'info');
+                    enableDemoMode();
+                }
+            } else {
+                // Disconnect
+                isConnected = false;
+                updateStatus('disconnected');
+                connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
+                chatInput.disabled = true;
+                sendBtn.disabled = true;
+                voiceBtn.disabled = true;
+                showNotification('Disconnected from AI service', 'success');
+            }
+        });
+
+        // Demo mode button
+        demoBtn.addEventListener('click', function() {
+            if (!isDemoMode) {
+                enableDemoMode();
+            }
+        });
+
+        // Send message function
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessageToChat(message, 'user');
+            chatInput.value = '';
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
+            
+            // Add message to conversation history
+            conversationHistory.push({ role: 'user', content: message });
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                let aiResponse;
+                
+                if (isDemoMode) {
+                    // Demo mode - simulated response
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate thinking
+                    aiResponse = demoResponses[Math.floor(Math.random() * demoResponses.length)];
+                } else {
+                    // Real AI mode
+                    const model = modelSelect.value;
+                    
+                    if (model === 'gemini') {
+                        // Call Gemini API
+                        const response = await axios.post(
+                            `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+                            {
+                                contents: [{
+                                    parts: [{
+                                        text: message
+                                    }]
+                                }]
+                            }
+                        );
+                        
+                        aiResponse = response.data.candidates[0].content.parts[0].text;
+                    } else if (model === 'cohere') {
+                        // Call Cohere API
+                        const response = await axios.post(
+                            'https://api.cohere.ai/v1/generate',
+                            {
+                                prompt: message,
+                                max_tokens: 500
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${apiKey}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+                        
+                        aiResponse = response.data.generations[0].text;
+                    }
+                }
+                
+                // Add AI response to chat
+                removeTypingIndicator();
+                addMessageToChat(aiResponse, 'ai');
+                
+                // Add to conversation history
+                conversationHistory.push({ role: 'assistant', content: aiResponse });
+                
+                // Save conversation history
+                localStorage.setItem('nexa_free_conversation', JSON.stringify(conversationHistory));
+                
+                // Animate avatar
+                animateAvatarTalking(aiResponse.length * 50);
+                
+            } catch (error) {
+                removeTypingIndicator();
+                let errorMessage = 'Sorry, there was an error processing your request.';
+                
+                if (error.response) {
+                    if (error.response.status === 429) {
+                        errorMessage = 'Rate limit exceeded. Please wait a moment before trying again.';
+                    } else if (error.response.status === 401) {
+                        errorMessage = 'Authentication error. Please check your API key.';
+                        isConnected = false;
+                        updateStatus('disconnected');
+                        connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
+                        
+                        // Switch to demo mode
+                        showNotification('Switching to demo mode...', 'info');
+                        enableDemoMode();
+                    }
+                }
+                
+                addMessageToChat(errorMessage, 'ai');
+            } finally {
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        // Voice input toggle
+        voiceBtn.addEventListener('click', function() {
+            if (!isConnected) {
+                showNotification('Please connect first', 'error');
+                return;
+            }
+            
+            if (!isListening) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+        });
+
+        // Clear chat
+        clearBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                conversationHistory = [];
+                chatMessages.innerHTML = '';
+                localStorage.removeItem('nexa_free_conversation');
+                
+                // Add initial messages
+                addMessageToChat("Chat cleared! How can I help you today?", 'ai');
+                if (isDemoMode) {
+                    addMessageToChat("Remember: You're in demo mode. Get a free API key for real AI responses!", 'ai');
+                }
+                showNotification('Chat history cleared', 'success');
+            }
+        });
+
+        // Send message on button click
+        sendBtn.addEventListener('click', sendMessage);
+
+        // Send message on Enter key
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Model selection change
+        modelSelect.addEventListener('change', function() {
+            selectedModel = this.value;
+            localStorage.setItem('nexa_free_model', selectedModel);
+            
+            if (selectedModel === 'demo') {
+                enableDemoMode();
+            } else {
+                isDemoMode = false;
+                demoBtn.innerHTML = '<i class="fas fa-play"></i> Enable Demo Mode';
+                demoBtn.classList.remove('btn-primary');
+                showNotification(`AI model changed to ${this.options[this.selectedIndex].text}`, 'success');
+            }
+        });
+
+        // API key input change
+        apiKeyInput.addEventListener('input', function() {
+            if (this.value !== '••••••••••••••••') {
+                isDemoMode = false;
+                demoBtn.innerHTML = '<i class="fas fa-play"></i> Enable Demo Mode';
+                demoBtn.classList.remove('btn-primary');
+                updateStatus('disconnected');
+                connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect AI';
+                chatInput.disabled = true;
+                sendBtn.disabled = true;
+                voiceBtn.disabled = true;
+            }
+        });
+
+        // Add message to chat
+        function addMessageToChat(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `message-${sender}`);
+            
+            const senderDiv = document.createElement('div');
+            senderDiv.classList.add('message-sender');
+            senderDiv.textContent = sender === 'ai' ? 'Nexa AI' : 'You';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            contentDiv.textContent = message;
+            
+            const actionsDiv = document.createElement('div');
+            actionsDiv.classList.add('message-actions');
+            
+            if (sender === 'ai') {
+                const copyBtn = document.createElement('button');
+                copyBtn.classList.add('action-btn');
+                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(message);
+                    showNotification('Message copied to clipboard', 'success');
+                };
+                
+                const speakBtn = document.createElement('button');
+                speakBtn.classList.add('action-btn');
+                speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> Speak';
+                speakBtn.onclick = () => speakText(message);
+                
+                actionsDiv.appendChild(copyBtn);
+                actionsDiv.appendChild(speakBtn);
+            }
+            
+            messageDiv.appendChild(senderDiv);
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(actionsDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            scrollChatToBottom();
+        }
+
+        // Render conversation history
+        function renderConversationHistory() {
+            chatMessages.innerHTML = '';
+            conversationHistory.forEach(msg => {
+                addMessageToChat(msg.content, msg.role === 'user' ? 'user' : 'ai');
+            });
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('message', 'message-ai');
+            typingDiv.id = 'typingIndicator';
+            
+            const senderDiv = document.createElement('div');
+            senderDiv.classList.add('message-sender');
+            senderDiv.textContent = 'Nexa AI';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            
+            const typingContainer = document.createElement('div');
+            typingContainer.classList.add('typing-indicator');
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('typing-dot');
+                typingContainer.appendChild(dot);
+            }
+            
+            contentDiv.appendChild(typingContainer);
+            typingDiv.appendChild(senderDiv);
+            typingDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(typingDiv);
+            scrollChatToBottom();
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Scroll chat to bottom
+        function scrollChatToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Animate avatar talking
+        function animateAvatarTalking(duration = 2000) {
+            avatar.classList.add('talking');
+            setTimeout(() => {
+                avatar.classList.remove('talking');
+            }, duration);
+        }
+
+        // Update connection status
+        function updateStatus(status) {
+            statusDot.className = 'status-dot';
+            switch (status) {
+                case 'connected':
+                    statusDot.classList.add('connected');
+                    statusText.textContent = isDemoMode ? 'Demo Mode' : 'Connected';
+                    statusDot.style.background = isDemoMode ? '#f59e0b' : '#4ade80';
+                    break;
+                case 'connecting':
+                    statusDot.classList.add('connecting');
+                    statusText.textContent = 'Connecting...';
+                    statusDot.style.background = '#f59e0b';
+                    break;
+                case 'disconnected':
+                    statusDot.classList.add('disconnected');
+                    statusText.textContent = 'Disconnected';
+                    statusDot.style.background = '#ef4444';
+                    break;
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Text-to-speech function
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                // Animate avatar while speaking
+                avatar.classList.add('talking');
+                utterance.onend = () => {
+                    avatar.classList.remove('talking');
+                };
+                
+                speechSynthesis.speak(utterance);
+            } else {
+                showNotification('Text-to-speech not supported in this browser', 'error');
+            }
+        }
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
