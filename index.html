@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa AI - Premium Assistant</title>
+    <title>Nexa AI - Ultra Realistic Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -17,6 +17,13 @@
             --secondary-dark: #7c3aed;
             --accent: #06b6d4;
             --accent-light: #22d3ee;
+            --skin: #ffd7c7;
+            --skin-shadow: #e6b8a7;
+            --skin-highlight: #ffe8e0;
+            --eye-color: #1a365d;
+            --hair-color: #2d3748;
+            --lip-color: #e53e3e;
+            --lip-inner: #fc8181;
             --dark: #0f172a;
             --darker: #020617;
             --dark-light: #1e293b;
@@ -39,6 +46,7 @@
             --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
             --gradient-accent: linear-gradient(135deg, var(--accent), var(--accent-light));
             --gradient-dark: linear-gradient(135deg, var(--darker), var(--dark));
+            --gradient-skin: linear-gradient(135deg, var(--skin-highlight), var(--skin), var(--skin-shadow));
         }
 
         * {
@@ -65,31 +73,19 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
-                radial-gradient(circle at 60% 20%, rgba(244, 63, 94, 0.1) 0%, transparent 60%);
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
             z-index: -2;
             animation: backgroundPulse 20s ease-in-out infinite alternate;
         }
 
-        /* Floating Particles */
-        .particles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
+        @keyframes backgroundPulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
         }
 
-        .particle {
-            position: absolute;
-            background: var(--primary-light);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: floatParticle linear infinite;
-        }
-
+        /* Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -98,7 +94,7 @@
             z-index: 1;
         }
 
-        /* Enhanced Header */
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -123,7 +119,6 @@
             display: flex;
             align-items: center;
             gap: 18px;
-            position: relative;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
@@ -143,21 +138,6 @@
             font-size: 26px;
             color: white;
             box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite linear;
         }
 
         .logo-text {
@@ -168,7 +148,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
-            text-shadow: 0 2px 10px rgba(6, 182, 212, 0.3);
         }
 
         .logo-subtitle {
@@ -179,10 +158,70 @@
             margin-top: -5px;
         }
 
-        /* Enhanced Navigation */
+        /* Quick Questions Panel */
+        .quick-questions {
+            position: absolute;
+            top: 130px;
+            right: 0;
+            width: 300px;
+            background: var(--glass-dark);
+            backdrop-filter: blur(25px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: none;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .quick-questions.show {
+            display: block;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .questions-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .question-btn {
+            padding: 14px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 14px;
+            color: var(--light-gray);
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        /* Navigation */
         .nav-links {
             display: flex;
-            gap: 40px;
+            gap: 35px;
             list-style: none;
         }
 
@@ -213,7 +252,6 @@
 
         .nav-link:hover {
             color: white;
-            transform: translateY(-2px);
         }
 
         .nav-link:hover::before {
@@ -228,42 +266,24 @@
             width: 100%;
         }
 
-        .nav-badge {
-            background: var(--gradient-primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 600;
-            margin-left: 5px;
-        }
-
-        /* Enhanced Main Content */
+        /* Main Content */
         .main-content {
             display: grid;
             grid-template-columns: 1.1fr 1.9fr;
             gap: 35px;
             margin-top: 40px;
-            animation: contentFade 0.8s ease-out;
         }
 
-        /* Enhanced Avatar Section */
+        /* REALISTIC HUMAN AVATAR SECTION */
         .avatar-section {
             background: var(--glass-dark);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             border-radius: 28px;
             padding: 35px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .avatar-section:hover {
-            box-shadow: var(--shadow-hover);
-            border-color: rgba(99, 102, 241, 0.3);
         }
 
         .avatar-section::before {
@@ -299,204 +319,337 @@
             font-size: 20px;
         }
 
-        /* Premium Human Avatar */
+        /* ULTRA REALISTIC HUMAN AVATAR */
         .human-avatar-container {
             position: relative;
             width: 100%;
-            height: 340px;
-            background: rgba(30, 41, 59, 0.4);
+            height: 380px;
+            background: rgba(30, 41, 59, 0.3);
             border-radius: 24px;
             overflow: hidden;
             margin-bottom: 35px;
             border: 1px solid var(--glass-border);
-            box-shadow: 
-                inset 0 0 40px rgba(0, 0, 0, 0.3),
-                0 20px 40px rgba(0, 0, 0, 0.4);
-            transition: all 0.4s ease;
-        }
-
-        .human-avatar-container:hover {
-            transform: translateY(-5px);
-            border-color: rgba(139, 92, 246, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .human-avatar {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 240px;
-            height: 240px;
+            position: relative;
+            width: 280px;
+            height: 280px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
-        .avatar-head {
+        /* Face Structure */
+        .face-base {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #5b21b6, #7c3aed, #a78bfa);
+            background: var(--gradient-skin);
             border-radius: 50%;
             box-shadow: 
-                0 0 60px rgba(124, 58, 237, 0.5),
-                inset 0 0 40px rgba(255, 255, 255, 0.15);
-            animation: avatarFloat 8s ease-in-out infinite;
-            filter: saturate(1.2);
+                inset 0 -20px 30px rgba(0, 0, 0, 0.2),
+                inset 20px 0 30px rgba(255, 255, 255, 0.1),
+                inset -20px 0 30px rgba(0, 0, 0, 0.1),
+                0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: subtleBreathing 4s ease-in-out infinite;
         }
 
-        .avatar-face {
+        /* Cheeks */
+        .cheek {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 180px;
-            height: 180px;
+            width: 60px;
+            height: 40px;
+            background: radial-gradient(circle at 30% 30%, #ffb8a8, transparent 70%);
+            border-radius: 50%;
+            top: 150px;
+            opacity: 0.3;
+            animation: blushPulse 8s infinite;
         }
 
-        .eyes-container {
+        .cheek-left {
+            left: 50px;
+        }
+
+        .cheek-right {
+            right: 50px;
+        }
+
+        /* Forehead */
+        .forehead {
             position: absolute;
-            top: 35%;
+            top: 30px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             width: 120px;
             height: 50px;
+            background: linear-gradient(to bottom, var(--skin-highlight), var(--skin));
+            border-radius: 50% 50% 0 0;
+            box-shadow: inset 0 10px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Ultra Realistic Eyes */
+        .eyes-container {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 80px;
             display: flex;
             justify-content: space-between;
+            z-index: 2;
+        }
+
+        .eye-wrapper {
+            position: relative;
+            width: 70px;
+            height: 70px;
         }
 
         .eye {
-            width: 44px;
-            height: 44px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
             background: white;
             border-radius: 50%;
-            position: relative;
             overflow: hidden;
             box-shadow: 
-                0 6px 20px rgba(0, 0, 0, 0.3),
-                inset 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.1),
+                inset 0 2px 10px rgba(255, 255, 255, 0.8);
         }
 
-        .eye::before {
-            content: '';
+        .eyelid {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 24px;
-            height: 24px;
-            background: #1e1b4b;
-            border-radius: 50%;
-            transition: all 0.1s ease;
-        }
-
-        .eye::after {
-            content: '';
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-        }
-
-        .eyebrow {
-            position: absolute;
-            top: -18px;
-            width: 50px;
-            height: 10px;
-            background: #4c1d95;
-            border-radius: 5px;
+            width: 100%;
+            height: 40px;
+            background: var(--skin);
+            border-radius: 50% 50% 0 0;
+            top: -10px;
+            z-index: 3;
+            transform-origin: bottom;
             transition: transform 0.3s ease;
         }
 
+        .eye-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, var(--eye-color), #0f172a);
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 0 20px rgba(0, 0, 0, 0.5),
+                0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .pupil {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            background: black;
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 0 10px rgba(0, 0, 0, 0.8),
+                0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .eye-sparkle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: sparkleTwinkle 3s infinite alternate;
+        }
+
+        /* Eyebrows */
+        .eyebrow {
+            position: absolute;
+            width: 75px;
+            height: 12px;
+            background: var(--hair-color);
+            border-radius: 6px;
+            top: -25px;
+            z-index: 1;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
         .eyebrow-left {
-            left: -3px;
+            left: -5px;
             transform: rotate(5deg);
         }
 
         .eyebrow-right {
-            right: -3px;
+            right: -5px;
             transform: rotate(-5deg);
         }
 
+        /* Nose - More Realistic */
         .nose {
             position: absolute;
-            top: 55%;
+            top: 160px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 18px;
-            height: 36px;
-            background: linear-gradient(to right, #8b5cf6, #7c3aed);
-            border-radius: 9px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(-50%);
+            width: 25px;
+            height: 40px;
+            background: linear-gradient(to right, var(--skin-shadow), var(--skin));
+            border-radius: 12px;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1;
         }
 
+        .nose-bridge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 30px;
+            background: linear-gradient(to bottom, var(--skin), var(--skin-shadow));
+            border-radius: 7px;
+        }
+
+        /* Ultra Realistic Mouth */
         .mouth-container {
             position: absolute;
-            top: 70%;
+            top: 220px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 50px;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 60px;
+            z-index: 2;
         }
 
         .mouth {
+            position: absolute;
             width: 100%;
-            height: 22px;
-            background: linear-gradient(to bottom, #dc2626, #ef4444);
-            border-radius: 0 0 50px 50px;
-            position: relative;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--lip-color), #c53030);
+            border-radius: 0 0 60px 60px;
+            box-shadow: 
+                0 5px 20px rgba(229, 62, 62, 0.3),
+                inset 0 -5px 10px rgba(0, 0, 0, 0.2),
+                inset 0 5px 10px rgba(255, 255, 255, 0.1);
             overflow: hidden;
             transition: all 0.2s ease;
-            box-shadow: 
-                0 6px 20px rgba(220, 38, 38, 0.4),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        .mouth.talking {
-            animation: premiumTalk 0.5s infinite alternate;
-        }
-
-        .tongue {
+        .mouth-inner {
             position: absolute;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 36px;
-            height: 12px;
-            background: linear-gradient(to bottom, #f87171, #fca5a5);
-            border-radius: 12px 12px 0 0;
+            width: 90px;
+            height: 20px;
+            background: linear-gradient(to top, var(--lip-inner), #fed7d7);
+            border-radius: 40px 40px 0 0;
+        }
+
+        .tongue {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 15px;
+            background: linear-gradient(to bottom, #fc8181, #feb2b2);
+            border-radius: 20px 20px 0 0;
             display: none;
+            box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.1);
         }
 
         .mouth.talking .tongue {
             display: block;
-            animation: premiumTongue 0.5s infinite alternate;
+            animation: tongueTalk 0.5s infinite alternate;
         }
 
+        /* Lips Outline */
+        .lips-outline {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(229, 62, 62, 0.3);
+            border-radius: 0 0 60px 60px;
+            box-sizing: border-box;
+        }
+
+        /* Hair - More Realistic */
         .hair {
             position: absolute;
-            top: -25px;
+            top: -40px;
             left: 50%;
             transform: translateX(-50%);
-            width: 260px;
-            height: 60px;
-            background: linear-gradient(to bottom, #312e81, #4c1d95);
+            width: 300px;
+            height: 100px;
+            background: linear-gradient(to bottom, var(--hair-color), #1a202c);
             border-radius: 50% 50% 0 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.4),
+                inset 0 -10px 20px rgba(0, 0, 0, 0.3);
+            z-index: 0;
         }
 
-        .hair::before {
-            content: '';
+        .hair-strands {
             position: absolute;
-            top: 40px;
+            top: 60px;
             left: 50%;
             transform: translateX(-50%);
-            width: 220px;
+            width: 250px;
             height: 40px;
-            background: linear-gradient(to bottom, #4c1d95, #5b21b6);
+            background: linear-gradient(to bottom, #4a5568, var(--hair-color));
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
+        /* Ears */
+        .ear {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: var(--skin);
+            border-radius: 15px;
+            top: 140px;
+            z-index: -1;
+        }
+
+        .ear-left {
+            left: 10px;
+            transform: rotate(-10deg);
+        }
+
+        .ear-right {
+            right: 10px;
+            transform: rotate(10deg);
+        }
+
+        /* Neck */
+        .neck {
+            position: absolute;
+            top: 260px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--skin), var(--skin-shadow));
+            border-radius: 0 0 30px 30px;
+            z-index: -2;
+        }
+
+        /* Avatar Status */
         .avatar-status {
             position: absolute;
             bottom: 25px;
@@ -510,12 +663,6 @@
             border-radius: 16px;
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
-        }
-
-        .avatar-status:hover {
-            background: rgba(0, 0, 0, 0.5);
-            transform: translateY(-2px);
         }
 
         .status-indicator {
@@ -537,120 +684,60 @@
             background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 6px 16px;
+            padding: 8px 20px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .status-action:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
 
-        /* Enhanced Controls */
-        .controls-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-            margin-top: 30px;
+        /* Mood Indicators */
+        .mood-indicator {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            display: flex;
+            gap: 10px;
         }
 
-        .control-card {
+        .mood-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 22px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .control-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.7s ease;
-        }
-
-        .control-card:hover::before {
-            left: 100%;
-        }
-
-        .control-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.25);
-            background: rgba(30, 41, 59, 0.8);
-        }
-
-        .control-card.active {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.15));
-            border-color: var(--primary);
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.3);
-        }
-
-        .control-card.active::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 20px;
-            background: var(--gradient-primary);
-            z-index: -1;
-            opacity: 0.3;
-            animation: borderGlow 2s infinite;
-        }
-
-        .control-icon {
-            width: 56px;
-            height: 56px;
-            background: var(--gradient-primary);
-            border-radius: 16px;
+            color: var(--light-gray);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: white;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .control-card:hover .control-icon {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
-        }
-
-        .control-label {
-            font-size: 15px;
-            font-weight: 600;
+        .mood-btn:hover {
+            background: var(--primary);
             color: white;
-            margin-bottom: 6px;
+            transform: scale(1.1);
         }
 
-        .control-description {
-            font-size: 12px;
-            color: var(--gray-light);
-            line-height: 1.4;
+        .mood-btn.active {
+            background: var(--primary);
+            color: white;
         }
 
-        /* Enhanced API Section */
+        /* API Configuration Section */
         .api-section {
             margin-top: 30px;
+            padding: 25px;
+            background: rgba(30, 41, 59, 0.4);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
         }
 
         .api-input-group {
@@ -668,10 +755,6 @@
             gap: 8px;
         }
 
-        .api-label i {
-            color: var(--accent-light);
-        }
-
         .api-input-wrapper {
             position: relative;
         }
@@ -679,7 +762,7 @@
         .api-input {
             width: 100%;
             padding: 16px 52px 16px 24px;
-            background: rgba(30, 41, 59, 0.6);
+            background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--glass-border);
             border-radius: 14px;
             color: white;
@@ -692,7 +775,7 @@
         .api-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(15, 23, 42, 0.8);
         }
 
         .api-input::placeholder {
@@ -719,141 +802,48 @@
             background: rgba(6, 182, 212, 0.1);
         }
 
-        .api-info {
-            font-size: 12px;
-            color: var(--gray-light);
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px;
-            background: rgba(30, 41, 59, 0.4);
-            border-radius: 10px;
-            border-left: 3px solid var(--accent);
-        }
-
-        /* Enhanced Free API Options */
-        .free-api-section {
-            margin-top: 25px;
-            padding: 25px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.08));
-            border-radius: 20px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .free-api-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--gradient-primary);
-        }
-
-        .free-api-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent-light);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .free-api-grid {
-            display: grid;
-            gap: 15px;
-        }
-
-        .api-option {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 18px;
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 16px;
-            text-decoration: none;
-            color: var(--light-gray);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .api-option::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        /* Test Connection Button */
+        .test-connection {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .api-option:hover::before {
-            left: 100%;
-        }
-
-        .api-option:hover {
-            transform: translateX(10px) translateY(-2px);
-            border-color: var(--primary);
-            background: rgba(30, 41, 59, 0.7);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .api-option-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1));
-            border-radius: 12px;
+            padding: 16px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            color: var(--primary-light);
-            flex-shrink: 0;
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            gap: 10px;
         }
 
-        .api-option-text {
-            flex: 1;
+        .test-connection:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
 
-        .api-option-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .test-connection:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .api-option-description {
-            font-size: 13px;
-            color: var(--gray-light);
-            line-height: 1.4;
+        .test-connection.testing {
+            background: linear-gradient(135deg, var(--warning), var(--warning-light));
         }
 
-        .api-option-badge {
-            background: var(--gradient-primary);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 10px;
+        .test-connection.connected {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
         }
 
-        /* Enhanced Chat Section */
+        /* Chat Section */
         .chat-section {
             background: var(--glass-dark);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             border-radius: 28px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow);
@@ -861,11 +851,6 @@
             display: flex;
             flex-direction: column;
             height: 720px;
-            transition: all 0.4s ease;
-        }
-
-        .chat-section:hover {
-            box-shadow: var(--shadow-hover);
         }
 
         .chat-header {
@@ -905,15 +890,6 @@
             gap: 10px;
         }
 
-        .chat-subtitle::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: statusPulse 2s infinite;
-        }
-
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -928,7 +904,17 @@
             display: flex;
             max-width: 82%;
             animation: messageSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.user {
@@ -941,11 +927,8 @@
             border-radius: 20px;
             line-height: 1.6;
             font-size: 15px;
-            position: relative;
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
         }
 
         .message.ai .message-bubble {
@@ -962,11 +945,6 @@
             border-bottom-right-radius: 6px;
         }
 
-        .message-bubble:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
         .message-avatar {
             width: 44px;
             height: 44px;
@@ -979,7 +957,6 @@
             flex-shrink: 0;
             align-self: flex-end;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
         }
 
         .message.ai .message-avatar {
@@ -992,83 +969,22 @@
             color: white;
         }
 
-        .message-avatar:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .message-time {
-            font-size: 11px;
-            color: var(--gray-light);
-            margin-top: 8px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .message:hover .message-time {
-            opacity: 1;
-        }
-
-        .message-time i {
-            font-size: 10px;
-        }
-
-        .message-actions {
-            position: absolute;
-            bottom: -25px;
-            right: 10px;
-            display: flex;
-            gap: 8px;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .message:hover .message-actions {
-            opacity: 1;
-            transform: translateY(-5px);
-        }
-
-        .message-action {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid var(--glass-border);
-            color: var(--light-gray);
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .message-action:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            transform: scale(1.1);
+        /* Enhanced message with emotions */
+        .message.ai[data-emotion] .message-bubble::before {
+            content: attr(data-emotion);
+            font-size: 12px;
+            background: rgba(99, 102, 241, 0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-right: 10px;
+            display: inline-block;
+            margin-bottom: 8px;
         }
 
         .chat-input-area {
             padding: 30px;
             background: rgba(30, 41, 59, 0.7);
             border-top: 1px solid var(--glass-border);
-            position: relative;
-        }
-
-        .chat-input-area::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--gradient-primary);
-            opacity: 0.5;
         }
 
         .input-container {
@@ -1087,19 +1003,12 @@
             font-size: 16px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
-            font-family: 'Inter', sans-serif;
         }
 
         .chat-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
             background: rgba(30, 41, 59, 0.8);
-            transform: translateY(-2px);
-        }
-
-        .chat-input::placeholder {
-            color: var(--gray-light);
-            font-style: italic;
         }
 
         .send-btn {
@@ -1116,32 +1025,11 @@
             font-size: 22px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .send-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease;
         }
 
         .send-btn:hover {
-            transform: translateY(-3px) scale(1.05);
+            transform: translateY(-3px);
             box-shadow: 0 20px 40px rgba(99, 102, 241, 0.6);
-        }
-
-        .send-btn:hover::before {
-            left: 100%;
-        }
-
-        .send-btn:active {
-            transform: translateY(0) scale(0.98);
         }
 
         .voice-btn {
@@ -1157,474 +1045,26 @@
             justify-content: center;
             font-size: 22px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .voice-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.6s ease;
         }
 
         .voice-btn:hover {
             background: rgba(30, 41, 59, 0.8);
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .voice-btn:hover::before {
-            left: 100%;
         }
 
         .voice-btn.listening {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
-            border-color: rgba(239, 68, 68, 0.3);
-            color: var(--error-light);
-            animation: listeningPulse 1.5s infinite;
-        }
-
-        .voice-btn.listening::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border-radius: 23px;
-            border: 2px solid var(--error-light);
-            opacity: 0.3;
-            animation: listeningRing 1.5s infinite;
-        }
-
-        /* Enhanced Features Section */
-        .features-section {
-            margin-top: 80px;
-            padding: 70px 0;
-            position: relative;
-        }
-
-        .features-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-            position: relative;
-        }
-
-        .section-header h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 42px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--light), var(--accent-light), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-header h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
             background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        .section-header p {
-            color: var(--gray-light);
-            font-size: 18px;
-            max-width: 650px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            background: var(--glass-dark);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 24px;
-            padding: 40px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--gradient-primary);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .feature-card:hover .feature-icon {
-            transform: scale(1.1) rotate(10deg);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: var(--primary-light);
-            margin-bottom: 30px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .feature-card h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
             color: white;
-            margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
         }
 
-        .feature-card p {
-            color: var(--gray-light);
-            line-height: 1.7;
-            font-size: 15.5px;
-            margin-bottom: 25px;
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
         }
 
-        .feature-link {
-            color: var(--accent-light);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-link:hover {
-            color: white;
-            gap: 12px;
-        }
-
-        /* Enhanced Footer */
-        .footer {
-            margin-top: 100px;
-            padding: 50px 0;
-            text-align: center;
-            border-top: 1px solid var(--glass-border);
-            position: relative;
-        }
-
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 1px;
-            background: var(--gradient-primary);
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .footer-logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-        }
-
-        .footer-logo-text {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--light), var(--accent-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .footer-text {
-            color: var(--gray-light);
-            font-size: 15px;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-        }
-
-        .footer-link {
-            color: var(--light-gray);
-            text-decoration: none;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .footer-link:hover {
-            color: var(--accent-light);
-            transform: translateY(-2px);
-        }
-
-        .footer-copyright {
-            margin-top: 40px;
-            font-size: 13px;
-            color: var(--gray);
-        }
-
-        /* Enhanced Animations */
-        @keyframes backgroundPulse {
-            0% {
-                background-position: 0% 0%;
-                filter: hue-rotate(0deg);
-            }
-            50% {
-                background-position: 100% 100%;
-                filter: hue-rotate(90deg);
-            }
-            100% {
-                background-position: 0% 0%;
-                filter: hue-rotate(0deg);
-            }
-        }
-
-        @keyframes floatParticle {
-            0% {
-                transform: translateY(0) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.3;
-            }
-            90% {
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px);
-                opacity: 0;
-            }
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            }
-            100% {
-                transform: translateX(100%) translateY(100%) rotate(45deg);
-            }
-        }
-
-        @keyframes avatarFloat {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1) rotate(0deg);
-                box-shadow: 
-                    0 0 60px rgba(124, 58, 237, 0.5),
-                    inset 0 0 40px rgba(255, 255, 255, 0.15);
-            }
-            50% {
-                transform: translate(-50%, calc(-50% - 15px)) scale(1.02) rotate(2deg);
-                box-shadow: 
-                    0 0 80px rgba(124, 58, 237, 0.6),
-                    inset 0 0 50px rgba(255, 255, 255, 0.2);
-            }
-        }
-
-        @keyframes premiumTalk {
-            0% {
-                height: 22px;
-                border-radius: 0 0 50px 50px;
-                transform: scaleY(1);
-            }
-            50% {
-                height: 12px;
-                border-radius: 0 0 30px 30px;
-                transform: scaleY(0.8);
-            }
-            100% {
-                height: 22px;
-                border-radius: 0 0 50px 50px;
-                transform: scaleY(1);
-            }
-        }
-
-        @keyframes premiumTongue {
-            0% {
-                height: 12px;
-                width: 36px;
-            }
-            50% {
-                height: 8px;
-                width: 40px;
-            }
-            100% {
-                height: 12px;
-                width: 36px;
-            }
-        }
-
-        @keyframes statusPulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.1);
-            }
-        }
-
-        @keyframes borderGlow {
-            0%, 100% {
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 0.6;
-            }
-        }
-
-        @keyframes listeningPulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
-            }
-        }
-
-        @keyframes listeningRing {
-            0% {
-                transform: scale(0.9);
-                opacity: 0.3;
-            }
-            100% {
-                transform: scale(1.2);
-                opacity: 0;
-            }
-        }
-
-        @keyframes contentFade {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes messageSlide {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Enhanced Typing Indicator */
-        .typing-indicator {
-            display: flex;
-            gap: 8px;
-            padding: 20px 25px;
-            background: rgba(30, 41, 59, 0.6);
-            border-radius: 22px;
-            width: fit-content;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .typing-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--gradient-primary);
-            border-radius: 50%;
-            animation: typingBounce 1.4s infinite ease-in-out;
-        }
-
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes typingBounce {
-            0%, 80%, 100% {
-                transform: translateY(0);
-                box-shadow: 0 0 10px var(--primary);
-            }
-            40% {
-                transform: translateY(-15px);
-                box-shadow: 0 0 20px var(--primary);
-            }
-        }
-
-        /* Enhanced Notification */
+        /* Notification */
         .notification {
             position: fixed;
             top: 40px;
@@ -1632,7 +1072,6 @@
             padding: 22px 28px;
             background: var(--glass-dark);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             border-radius: 20px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow);
@@ -1657,10 +1096,6 @@
             border-left-color: var(--error);
         }
 
-        .notification.info {
-            border-left-color: var(--accent);
-        }
-
         .notification.warning {
             border-left-color: var(--warning);
         }
@@ -1681,7 +1116,6 @@
             justify-content: center;
             font-size: 20px;
             color: var(--primary);
-            flex-shrink: 0;
         }
 
         .notification.success .notification-icon {
@@ -1692,11 +1126,6 @@
         .notification.error .notification-icon {
             background: rgba(239, 68, 68, 0.1);
             color: var(--error);
-        }
-
-        .notification.info .notification-icon {
-            background: rgba(6, 182, 212, 0.1);
-            color: var(--accent);
         }
 
         .notification.warning .notification-icon {
@@ -1721,25 +1150,176 @@
             line-height: 1.5;
         }
 
-        .notification-close {
-            background: transparent;
-            border: none;
-            color: var(--gray-light);
-            cursor: pointer;
-            font-size: 18px;
-            padding: 5px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+        /* Emotion Effects */
+        .emotion-happy .cheek {
+            opacity: 0.6;
+            animation: blushPulse 2s infinite;
         }
 
-        .notification-close:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
+        .emotion-thinking .eyebrow {
+            transform: translateY(-5px);
         }
 
-        /* Enhanced Scrollbar */
+        .emotion-sad .mouth {
+            transform: translateY(5px);
+            height: 35px;
+            border-radius: 50%;
+        }
+
+        .emotion-excited .eye-sparkle {
+            animation: sparkleTwinkle 0.5s infinite alternate;
+        }
+
+        /* Animations */
+        @keyframes subtleBreathing {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.005);
+            }
+        }
+
+        @keyframes blushPulse {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes eyeBlink {
+            0%, 90%, 100% {
+                transform: scaleY(1);
+            }
+            95% {
+                transform: scaleY(0.1);
+            }
+        }
+
+        @keyframes eyeMovement {
+            0%, 100% {
+                transform: translate(-50%, -50%);
+            }
+            25% {
+                transform: translate(-40%, -40%);
+            }
+            50% {
+                transform: translate(-60%, -50%);
+            }
+            75% {
+                transform: translate(-50%, -60%);
+            }
+        }
+
+        @keyframes mouthTalk {
+            0%, 100% {
+                height: 40px;
+                border-radius: 0 0 60px 60px;
+            }
+            50% {
+                height: 25px;
+                border-radius: 0 0 40px 40px;
+            }
+        }
+
+        @keyframes tongueTalk {
+            0%, 100% {
+                height: 15px;
+                width: 40px;
+            }
+            50% {
+                height: 10px;
+                width: 35px;
+            }
+        }
+
+        @keyframes statusPulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes sparkleTwinkle {
+            0%, 100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
+        }
+
+        /* Typing Animation */
+        @keyframes typingBounce {
+            0%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-section {
+                height: 650px;
+            }
+            
+            .quick-questions {
+                position: relative;
+                top: 0;
+                right: 0;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .human-avatar-container {
+                height: 320px;
+            }
+            
+            .human-avatar {
+                width: 240px;
+                height: 240px;
+            }
+            
+            .mood-indicator {
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -1750,185 +1330,12 @@
         ::-webkit-scrollbar-thumb {
             background: var(--gradient-primary);
             border-radius: 10px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
-        }
-
-        ::-webkit-scrollbar-corner {
-            background: transparent;
-        }
-
-        /* Enhanced Responsive Design */
-        @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .chat-section {
-                height: 650px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 25px;
-                padding-bottom: 25px;
-            }
-            
-            .nav-links {
-                gap: 25px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .human-avatar-container {
-                height: 300px;
-            }
-            
-            .controls-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .section-header h2 {
-                font-size: 36px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .controls-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-links {
-                flex-wrap: wrap;
-                gap: 20px;
-            }
-            
-            .section-header h2 {
-                font-size: 32px;
-            }
-            
-            .chat-input-area {
-                padding: 20px;
-            }
-            
-            .input-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .chat-input, .voice-btn, .send-btn {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-text {
-                font-size: 28px;
-            }
-            
-            .nav-links {
-                gap: 15px;
-            }
-            
-            .nav-link {
-                font-size: 14px;
-            }
-            
-            .human-avatar-container {
-                height: 260px;
-            }
-            
-            .feature-card {
-                padding: 25px;
-            }
-            
-            .notification {
-                left: 15px;
-                right: 15px;
-                max-width: none;
-            }
-        }
-
-        /* Loading Animation */
-        .loading {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        /* Selection Styling */
-        ::selection {
-            background: rgba(99, 102, 241, 0.3);
-            color: white;
-        }
-
-        ::-moz-selection {
-            background: rgba(99, 102, 241, 0.3);
-            color: white;
-        }
-
-        /* Focus Visible */
-        :focus-visible {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-
-        /* Print Styles */
-        @media print {
-            .avatar-section,
-            .voice-btn,
-            .notification,
-            .footer {
-                display: none;
-            }
-            
-            .chat-section {
-                box-shadow: none;
-                border: 1px solid #ccc;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Particles Background -->
-    <div class="particles" id="particles"></div>
-
     <div class="container">
-        <!-- Enhanced Header -->
+        <!-- Header -->
         <header class="header">
             <div class="logo" id="logo">
                 <div class="logo-icon">
@@ -1936,165 +1343,183 @@
                 </div>
                 <div>
                     <div class="logo-text">Nexa AI</div>
-                    <div class="logo-subtitle">PREMIUM ASSISTANT</div>
+                    <div class="logo-subtitle">ULTRA REALISTIC ASSISTANT</div>
                 </div>
             </div>
             <nav>
                 <ul class="nav-links">
-                    <li><a href="#" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-robot"></i> AI Assistant</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-key"></i> API Keys <span class="nav-badge">FREE</span></a></li>
+                    <li><a href="#" class="nav-link active" id="navHome"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#" class="nav-link" id="navQuestions"><i class="fas fa-question-circle"></i> Quick Questions</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-robot"></i> Assistant</a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-key"></i> API Setup</a></li>
                     <li><a href="#" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
-                    <li><a href="#" class="nav-link"><i class="fas fa-question-circle"></i> Help</a></li>
                 </ul>
             </nav>
         </header>
 
+        <!-- Quick Questions Panel -->
+        <div class="quick-questions" id="quickQuestions">
+            <h3 class="questions-title"><i class="fas fa-lightbulb"></i> Quick Questions</h3>
+            <div class="question-buttons">
+                <button class="question-btn" data-question="life_advice">
+                    <i class="fas fa-heart"></i> Life Advice
+                </button>
+                <button class="question-btn" data-question="creativity">
+                    <i class="fas fa-palette"></i> Creativity Tips
+                </button>
+                <button class="question-btn" data-question="career">
+                    <i class="fas fa-briefcase"></i> Career Guidance
+                </button>
+                <button class="question-btn" data-question="relationships">
+                    <i class="fas fa-users"></i> Relationships
+                </button>
+                <button class="question-btn" data-question="motivation">
+                    <i class="fas fa-fire"></i> Daily Motivation
+                </button>
+                <button class="question-btn" data-question="problem_solving">
+                    <i class="fas fa-puzzle-piece"></i> Problem Solving
+                </button>
+                <button class="question-btn" data-question="mental_health">
+                    <i class="fas fa-brain"></i> Mental Wellness
+                </button>
+                <button class="question-btn" data-question="learning">
+                    <i class="fas fa-graduation-cap"></i> Learning Tips
+                </button>
+            </div>
+        </div>
+
         <div class="main-content">
-            <!-- Enhanced Avatar Section -->
+            <!-- Ultra Realistic Avatar Section -->
             <section class="avatar-section">
                 <h2 class="section-title">
-                    <i class="fas fa-user-tie"></i> Premium Assistant
+                    <i class="fas fa-user-tie"></i> Ultra Realistic AI Assistant
                 </h2>
                 
                 <div class="human-avatar-container">
+                    <!-- Mood Controls -->
+                    <div class="mood-indicator">
+                        <button class="mood-btn" data-mood="default" title="Default">
+                            <i class="fas fa-smile"></i>
+                        </button>
+                        <button class="mood-btn" data-mood="thinking" title="Thinking">
+                            <i class="fas fa-lightbulb"></i>
+                        </button>
+                        <button class="mood-btn" data-mood="happy" title="Happy">
+                            <i class="fas fa-laugh"></i>
+                        </button>
+                        <button class="mood-btn" data-mood="excited" title="Excited">
+                            <i class="fas fa-star"></i>
+                        </button>
+                    </div>
+                    
                     <div class="human-avatar">
-                        <div class="avatar-head"></div>
-                        <div class="avatar-face">
-                            <div class="eyes-container">
+                        <!-- Hair -->
+                        <div class="hair"></div>
+                        <div class="hair-strands"></div>
+                        
+                        <!-- Face Base -->
+                        <div class="face-base"></div>
+                        
+                        <!-- Ears -->
+                        <div class="ear ear-left"></div>
+                        <div class="ear ear-right"></div>
+                        
+                        <!-- Forehead -->
+                        <div class="forehead"></div>
+                        
+                        <!-- Cheeks -->
+                        <div class="cheek cheek-left"></div>
+                        <div class="cheek cheek-right"></div>
+                        
+                        <!-- Ultra Realistic Eyes -->
+                        <div class="eyes-container">
+                            <div class="eye-wrapper">
                                 <div class="eyebrow eyebrow-left"></div>
-                                <div class="eye left-eye"></div>
-                                <div class="eye right-eye"></div>
-                                <div class="eyebrow eyebrow-right"></div>
+                                <div class="eyelid left-eyelid"></div>
+                                <div class="eye left-eye">
+                                    <div class="eye-inner left-eye-inner">
+                                        <div class="pupil left-pupil"></div>
+                                        <div class="eye-sparkle left-sparkle"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="nose"></div>
-                            <div class="mouth-container">
-                                <div class="mouth" id="mouth">
-                                    <div class="tongue"></div>
+                            
+                            <div class="eye-wrapper">
+                                <div class="eyebrow eyebrow-right"></div>
+                                <div class="eyelid right-eyelid"></div>
+                                <div class="eye right-eye">
+                                    <div class="eye-inner right-eye-inner">
+                                        <div class="pupil right-pupil"></div>
+                                        <div class="eye-sparkle right-sparkle"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="hair"></div>
+                        
+                        <!-- Nose -->
+                        <div class="nose">
+                            <div class="nose-bridge"></div>
+                        </div>
+                        
+                        <!-- Ultra Realistic Mouth -->
+                        <div class="mouth-container">
+                            <div class="mouth" id="mouth">
+                                <div class="mouth-inner"></div>
+                                <div class="tongue"></div>
+                                <div class="lips-outline"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Neck -->
+                        <div class="neck"></div>
                     </div>
                     
                     <div class="avatar-status">
                         <div class="status-indicator"></div>
-                        <div class="status-text" id="statusText">Premium Demo Mode Active</div>
-                        <button class="status-action" id="statusAction">Connect API</button>
+                        <div class="status-text" id="statusText">Demo Mode Active</div>
+                        <button class="status-action" id="connectBtn">Connect API</button>
                     </div>
                 </div>
                 
-                <div class="controls-grid">
-                    <div class="control-card active" id="demoControl" data-tooltip="Try without API key">
-                        <div class="control-icon">
-                            <i class="fas fa-play-circle"></i>
-                        </div>
-                        <div class="control-label">Demo Mode</div>
-                        <div class="control-description">Try instantly without setup</div>
-                    </div>
-                    
-                    <div class="control-card" id="voiceControl" data-tooltip="Enable voice input">
-                        <div class="control-icon">
-                            <i class="fas fa-microphone-alt"></i>
-                        </div>
-                        <div class="control-label">Voice Chat</div>
-                        <div class="control-description">Speak naturally</div>
-                    </div>
-                    
-                    <div class="control-card" id="apiControl" data-tooltip="Configure API settings">
-                        <div class="control-icon">
-                            <i class="fas fa-key"></i>
-                        </div>
-                        <div class="control-label">API Setup</div>
-                        <div class="control-description">Connect real AI</div>
-                    </div>
-                    
-                    <div class="control-card" id="settingsControl" data-tooltip="Customize your experience">
-                        <div class="control-icon">
-                            <i class="fas fa-sliders-h"></i>
-                        </div>
-                        <div class="control-label">Settings</div>
-                        <div class="control-description">Personalize</div>
-                    </div>
-                </div>
-                
-                <!-- API Section -->
+                <!-- API Configuration -->
                 <div class="api-section">
                     <div class="api-input-group">
                         <label class="api-label">
-                            <i class="fas fa-key"></i> API Configuration
+                            <i class="fas fa-key"></i> Google Gemini API Key
                         </label>
                         <div class="api-input-wrapper">
-                            <input type="password" id="apiKey" class="api-input" placeholder="Enter your API key (optional)">
-                            <button class="api-action" id="toggleApiKey" title="Show/Hide API key">
+                            <input type="password" id="apiKey" class="api-input" placeholder="Enter your Gemini API key here...">
+                            <button class="api-action" id="toggleApiKey">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
                         <div class="api-info">
                             <i class="fas fa-info-circle"></i>
-                            Your API key is stored locally and never sent to our servers
+                            Get a free API key from <a href="https://makersuite.google.com/app/apikey" target="_blank" style="color: var(--accent-light);">Google AI Studio</a> (60 requests/minute free)
                         </div>
                     </div>
                     
-                    <!-- Model Selector -->
-                    <select id="modelSelect" class="api-input" style="margin-top: 15px; cursor: pointer;">
-                        <option value="demo">🎯 Demo Mode (No API needed)</option>
-                        <option value="gemini">🚀 Google Gemini (60 free requests/min)</option>
-                        <option value="cohere">⚡ Cohere Command (Free tier available)</option>
-                        <option value="openai">🤖 OpenAI (GPT-3.5/4 with credit)</option>
-                    </select>
-                </div>
-                
-                <!-- Free API Options -->
-                <div class="free-api-section">
-                    <div class="free-api-title">
-                        <i class="fas fa-gift"></i> Get Free API Keys
-                    </div>
-                    <div class="free-api-grid">
-                        <a href="https://makersuite.google.com/app/apikey" target="_blank" class="api-option" id="geminiOption">
-                            <div class="api-option-icon">
-                                <i class="fab fa-google"></i>
-                            </div>
-                            <div class="api-option-text">
-                                <div class="api-option-title">
-                                    Google Gemini
-                                    <span class="api-option-badge">Recommended</span>
-                                </div>
-                                <div class="api-option-description">
-                                    60 free requests per minute, no credit card required
-                                </div>
-                            </div>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                        
-                        <a href="https://dashboard.cohere.com/api-keys" target="_blank" class="api-option" id="cohereOption">
-                            <div class="api-option-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <div class="api-option-text">
-                                <div class="api-option-title">
-                                    Cohere API
-                                    <span class="api-option-badge">Free Tier</span>
-                                </div>
-                                <div class="api-option-description">
-                                    Generous free tier with advanced language capabilities
-                                </div>
-                            </div>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
+                    <button class="test-connection" id="testConnection">
+                        <i class="fas fa-plug"></i> Test Connection
+                    </button>
                 </div>
             </section>
 
-            <!-- Enhanced Chat Section -->
+            <!-- Chat Section -->
             <section class="chat-section">
                 <div class="chat-header">
-                    <h2 class="chat-title">Premium AI Assistant</h2>
-                    <p class="chat-subtitle">Intelligent conversations with memory and context</p>
+                    <h2 class="chat-title">AI Assistant Chat</h2>
+                    <p class="chat-subtitle">
+                        <span id="connectionStatus">Demo Mode</span>
+                        • 
+                        <span id="modelStatus">Simulated AI</span>
+                        •
+                        <span id="avatarEmotion">😊 Neutral</span>
+                    </p>
                 </div>
                 
                 <div class="chat-messages" id="chatMessages">
-                    <!-- Messages will be dynamically added here -->
+                    <!-- Messages will be added here by JavaScript -->
                 </div>
                 
                 <div class="chat-input-area">
@@ -2102,7 +1527,7 @@
                         <button class="voice-btn" id="voiceBtn" title="Voice input">
                             <i class="fas fa-microphone"></i>
                         </button>
-                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything...">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask about life, creativity, relationships, or anything...">
                         <button class="send-btn" id="sendBtn" title="Send message">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -2110,91 +1535,9 @@
                 </div>
             </section>
         </div>
-
-        <!-- Enhanced Features Section -->
-        <section class="features-section">
-            <div class="section-header">
-                <h2>Advanced AI Capabilities</h2>
-                <p>Experience the future of human-AI interaction with our premium features</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>Intelligent Conversations</h3>
-                    <p>Advanced natural language processing with context awareness, memory retention, and personalized responses.</p>
-                    <a href="#" class="feature-link">
-                        Learn more <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Code Assistance</h3>
-                    <p>Real-time code generation, debugging, optimization, and learning support across multiple programming languages.</p>
-                    <a href="#" class="feature-link">
-                        Try code assistant <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-pen-nib"></i>
-                    </div>
-                    <h3>Creative Writing</h3>
-                    <p>AI-powered content creation, editing, brainstorming, and creative assistance for all your writing needs.</p>
-                    <a href="#" class="feature-link">
-                        Explore writing tools <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Problem Solving</h3>
-                    <p>Advanced analytical capabilities for complex problem-solving, research, and decision support.</p>
-                    <a href="#" class="feature-link">
-                        See examples <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Enhanced Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <div class="footer-logo-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <div class="footer-logo-text">Nexa AI</div>
-                </div>
-                
-                <p class="footer-text">
-                    Experience the future of AI assistance with our premium platform. 
-                    Completely free to use with optional API integration for enhanced capabilities.
-                </p>
-                
-                <div class="footer-links">
-                    <a href="#" class="footer-link"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
-                    <a href="#" class="footer-link"><i class="fas fa-file-contract"></i> Terms of Service</a>
-                    <a href="#" class="footer-link"><i class="fas fa-book"></i> Documentation</a>
-                    <a href="#" class="footer-link"><i class="fas fa-envelope"></i> Contact Us</a>
-                </div>
-                
-                <div class="footer-copyright">
-                    © 2023 Nexa AI Assistant. All rights reserved. | Premium Edition
-                </div>
-            </div>
-        </footer>
     </div>
 
-    <!-- Enhanced Notification -->
+    <!-- Notification -->
     <div class="notification" id="notification">
         <div class="notification-content">
             <div class="notification-icon">
@@ -2202,7 +1545,7 @@
             </div>
             <div class="notification-text">
                 <div class="notification-title" id="notificationTitle">Welcome</div>
-                <div class="notification-message" id="notificationMessage">Loading premium AI assistant...</div>
+                <div class="notification-message" id="notificationMessage">Loading Ultra Realistic AI Assistant...</div>
             </div>
             <button class="notification-close" id="notificationClose">
                 <i class="fas fa-times"></i>
@@ -2210,276 +1553,441 @@
         </div>
     </div>
 
+    <!-- Sound Elements (invisible) -->
+    <audio id="typingSound" src="https://assets.mixkit.co/sfx/preview/mixkit-fast-keyboard-typing-441.mp3"></audio>
+    <audio id="blinkSound" src="https://assets.mixkit.co/sfx/preview/mixkit-quick-soft-blink-2144.mp3"></audio>
+    <audio id="smileSound" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-giggle-2214.mp3"></audio>
+    <audio id="thinkingSound" src="https://assets.mixkit.co/sfx/preview/mixkit-thinker-667.mp3"></audio>
+    <audio id="notificationSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
+
     <!-- JavaScript -->
     <script>
         // ============================================
-        // ENHANCED JAVASCRIPT FUNCTIONALITY
+        // ENHANCED NEXA AI WITH ULTRA REALISTIC FEATURES
         // ============================================
 
         // DOM Elements
-        const leftEye = document.querySelector('.left-eye');
-        const rightEye = document.querySelector('.right-eye');
+        const leftEyeInner = document.querySelector('.left-eye-inner');
+        const rightEyeInner = document.querySelector('.right-eye-inner');
+        const leftEyelid = document.querySelector('.left-eyelid');
+        const rightEyelid = document.querySelector('.right-eyelid');
         const mouth = document.getElementById('mouth');
         const statusText = document.getElementById('statusText');
-        const statusAction = document.getElementById('statusAction');
-        const voiceBtn = document.getElementById('voiceBtn');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const chatMessages = document.getElementById('chatMessages');
+        const connectBtn = document.getElementById('connectBtn');
         const apiKeyInput = document.getElementById('apiKey');
         const toggleApiKey = document.getElementById('toggleApiKey');
-        const modelSelect = document.getElementById('modelSelect');
+        const testConnection = document.getElementById('testConnection');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const modelStatus = document.getElementById('modelStatus');
+        const avatarEmotion = document.getElementById('avatarEmotion');
         const notification = document.getElementById('notification');
         const notificationTitle = document.getElementById('notificationTitle');
         const notificationMessage = document.getElementById('notificationMessage');
         const notificationClose = document.getElementById('notificationClose');
-        const particlesContainer = document.getElementById('particles');
-        const logo = document.getElementById('logo');
+        const quickQuestions = document.getElementById('quickQuestions');
+        const navQuestions = document.getElementById('navQuestions');
+        const navHome = document.getElementById('navHome');
+        const moodButtons = document.querySelectorAll('.mood-btn');
+        const questionButtons = document.querySelectorAll('.question-btn');
 
-        // Control Cards
-        const demoControl = document.getElementById('demoControl');
-        const voiceControl = document.getElementById('voiceControl');
-        const apiControl = document.getElementById('apiControl');
-        const settingsControl = document.getElementById('settingsControl');
+        // Audio Elements
+        const typingSound = document.getElementById('typingSound');
+        const blinkSound = document.getElementById('blinkSound');
+        const smileSound = document.getElementById('smileSound');
+        const thinkingSound = document.getElementById('thinkingSound');
+        const notificationSound = document.getElementById('notificationSound');
 
-        // API Options
-        const geminiOption = document.getElementById('geminiOption');
-        const cohereOption = document.getElementById('cohereOption');
-
-        // State Management
+        // Enhanced State Management
         const state = {
-            isConnected: true,
-            isListening: false,
+            isConnected: false,
             isDemoMode: true,
+            isListening: false,
             isTyping: false,
             isAvatarTalking: false,
-            apiKey: localStorage.getItem('nexa_premium_api_key') || '',
-            selectedModel: localStorage.getItem('nexa_premium_model') || 'demo',
+            currentMood: 'default',
+            currentEmotion: 'neutral',
+            apiKey: '',
             conversationHistory: [],
-            activeControl: 'demo',
-            notificationQueue: [],
-            isNotificationShowing: false,
+            recognition: null,
             eyeMovementInterval: null,
             blinkInterval: null,
-            expressionInterval: null,
-            particles: []
+            moodHistory: [],
+            soundEnabled: true
         };
 
-        // Enhanced Demo Responses
-        const demoResponses = [
-            {
-                text: "I understand your question! In a fully connected AI system, I would provide detailed, nuanced responses based on comprehensive data analysis and contextual understanding.",
-                type: "analytical"
-            },
-            {
-                text: "That's an excellent point! With API integration, I could access vast information resources, process complex queries in real-time, and deliver accurate, up-to-date responses tailored to your specific needs.",
-                type: "informative"
-            },
-            {
-                text: "Great question! While I'm in demo mode, I can demonstrate sophisticated conversation patterns, provide structured explanations, and showcase how I would handle various types of inquiries with intelligence and clarity.",
-                type: "educational"
-            },
-            {
-                text: "Thank you for your inquiry! This premium interface demonstrates advanced AI interaction capabilities. Adding a free API key unlocks real computational power, memory retention, and advanced natural language processing.",
-                type: "technical"
-            },
-            {
-                text: "I appreciate your curiosity! This elegant platform shows what's possible with modern AI. Try connecting a free Google Gemini API key for 60 free requests per minute of real AI processing.",
-                type: "encouraging"
-            },
-            {
-                text: "That's something I'm designed to help with! In full AI mode, I could provide step-by-step solutions, creative alternatives, practical implementations, and detailed explanations for complex scenarios.",
-                type: "helpful"
-            },
-            {
-                text: "Interesting topic! I'm built to handle diverse subjects with sophistication and depth. The demo gives you a taste of premium AI interaction, while API access provides the full computational experience.",
-                type: "engaging"
-            }
-        ];
+        // Comprehensive Knowledge Base with Emotional Responses
+        const knowledgeBase = {
+            life_advice: [
+                {
+                    question: "How can I find purpose in life?",
+                    answer: "Purpose isn't found, it's built through consistent actions that align with your values. Start small - what makes you lose track of time? What problems do you naturally want to solve? Your purpose emerges from what you do daily, not from a single discovery.",
+                    emotion: "thoughtful",
+                    mood: "thinking"
+                },
+                {
+                    question: "How to deal with failure?",
+                    answer: "Failure is data, not defeat. Every setback teaches what doesn't work. The most successful people have the most failures - they just learn faster. Ask: 'What did this teach me?' rather than 'Why did this happen?'",
+                    emotion: "encouraging",
+                    mood: "happy"
+                },
+                {
+                    question: "How to be happier?",
+                    answer: "Happiness is a practice, not a destination. Three science-backed ways: 1) Gratitude journaling (write 3 things daily), 2) Acts of kindness (small, regular), 3) Mindfulness (5 minutes daily). Happiness compounds through consistent practice.",
+                    emotion: "inspiring",
+                    mood: "excited"
+                },
+                {
+                    question: "How to overcome anxiety?",
+                    answer: "Anxiety is your body's protection system working overtime. Grounding techniques: 5-4-3-2-1 (name 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste). Remember: anxiety is temporary, and you've survived 100% of your anxious days.",
+                    emotion: "calming",
+                    mood: "default"
+                }
+            ],
 
-        // Enhanced Welcome Messages
-        const welcomeMessages = [
-            "Welcome to Nexa AI Premium! I'm your sophisticated AI assistant. How can I help you today?",
-            "Hello! I'm Nexa, ready to assist with intelligent conversations. What would you like to explore?",
-            "Greetings! I'm here to help with questions, creative tasks, problem-solving, and more. What's on your mind?",
-            "Welcome! As your AI assistant, I can help with learning, coding, writing, analysis, and much more."
-        ];
+            creativity: [
+                {
+                    question: "How to boost creativity?",
+                    answer: "Creativity thrives on constraints and novelty. Try: 1) Morning pages (3 pages of stream-of-consciousness writing), 2) Creative cross-training (try a different art form), 3) The 30 Circles Test (fill 30 circles with different things in 3 minutes). Creativity is a muscle that strengthens with use.",
+                    emotion: "inspiring",
+                    mood: "excited"
+                },
+                {
+                    question: "How to overcome creative block?",
+                    answer: "Creative block often means you're trying to be perfect. Lower your standards intentionally - create something 'bad' on purpose. Set a 10-minute timer and create the worst version possible. This bypasses perfectionism and gets the creative juices flowing.",
+                    emotion: "encouraging",
+                    mood: "thinking"
+                },
+                {
+                    question: "Where do creative ideas come from?",
+                    answer: "Ideas are connections between existing concepts. The best way to generate ideas: consume diverse inputs (read outside your field, watch documentaries, talk to people different from you), then let your subconscious connect the dots during walks or showers.",
+                    emotion: "thoughtful",
+                    mood: "thinking"
+                },
+                {
+                    question: "How to stay creatively motivated?",
+                    answer: "Motivation follows action, not the other way around. Create a 'creative ritual' - same time, same place, same starting action (like brewing tea). The consistency creates momentum. Also, track your creative 'streaks' like in a game.",
+                    emotion: "inspiring",
+                    mood: "happy"
+                }
+            ],
+
+            career: [
+                {
+                    question: "How to find the right career?",
+                    answer: "Instead of 'What do I want to do?' ask 'What problems do I enjoy solving?' and 'What environments make me feel energized?' Career fit has three components: skills, interests, and values. Map these and look for intersections.",
+                    emotion: "thoughtful",
+                    mood: "thinking"
+                },
+                {
+                    question: "How to negotiate salary?",
+                    answer: "Frame negotiations around value, not need. Research market rates, quantify your contributions, and practice your pitch. Remember: The first number mentioned anchors the negotiation. Be prepared to walk away politely if needed.",
+                    emotion: "confident",
+                    mood: "default"
+                }
+            ],
+
+            relationships: [
+                {
+                    question: "How to improve communication?",
+                    answer: "Practice active listening: paraphrase what you heard before responding. Use 'I feel' statements instead of 'You always' accusations. Remember: The goal is understanding, not winning the argument.",
+                    emotion: "calming",
+                    mood: "default"
+                },
+                {
+                    question: "How to set healthy boundaries?",
+                    answer: "Boundaries are about your actions, not others'. Clearly state what you will do if your boundary is crossed. Example: 'I need to end calls by 9 PM to get enough sleep. If we're still talking then, I'll need to say goodbye.'",
+                    emotion: "assertive",
+                    mood: "thinking"
+                }
+            ],
+
+            motivation: [
+                {
+                    question: "How to stay motivated daily?",
+                    answer: "Motivation is unreliable - build systems instead. The 2-Minute Rule: If a task takes less than 2 minutes, do it immediately. Habit stacking: Attach new habits to existing ones. Track progress visually - seeing growth is motivating.",
+                    emotion: "energetic",
+                    mood: "excited"
+                }
+            ],
+
+            problem_solving: [
+                {
+                    question: "How to approach complex problems?",
+                    answer: "Break problems into smaller parts until they feel manageable. Use the Rubber Duck method: Explain the problem aloud as if to a child. Often, the solution appears during the explanation. Sleep on it - your subconscious works while you rest.",
+                    emotion: "analytical",
+                    mood: "thinking"
+                }
+            ],
+
+            mental_health: [
+                {
+                    question: "How to manage stress?",
+                    answer: "Stress needs both physical and mental outlets. Physically: exercise, deep breathing, progressive muscle relaxation. Mentally: cognitive restructuring (challenge negative thoughts), gratitude practice, and scheduled worry time (20 minutes daily to worry intentionally).",
+                    emotion: "calming",
+                    mood: "default"
+                }
+            ],
+
+            learning: [
+                {
+                    question: "How to learn faster?",
+                    answer: "Use the Feynman Technique: Learn a concept, then explain it simply as if teaching a child. When you get stuck, you've found a gap in understanding. Also: space out practice sessions and test yourself frequently.",
+                    emotion: "enthusiastic",
+                    mood: "excited"
+                }
+            ]
+        };
+
+        // Sound Library (fallback to online sounds if needed)
+        const soundLibrary = {
+            blink: () => {
+                if (blinkSound && state.soundEnabled) {
+                    blinkSound.currentTime = 0;
+                    blinkSound.volume = 0.1;
+                    blinkSound.play().catch(e => console.log("Sound play failed:", e));
+                }
+            },
+            smile: () => {
+                if (smileSound && state.soundEnabled) {
+                    smileSound.currentTime = 0;
+                    smileSound.volume = 0.2;
+                    smileSound.play().catch(e => console.log("Sound play failed:", e));
+                }
+            },
+            thinking: () => {
+                if (thinkingSound && state.soundEnabled) {
+                    thinkingSound.currentTime = 0;
+                    thinkingSound.volume = 0.15;
+                    thinkingSound.play().catch(e => console.log("Sound play failed:", e));
+                }
+            },
+            notification: () => {
+                if (notificationSound && state.soundEnabled) {
+                    notificationSound.currentTime = 0;
+                    notificationSound.volume = 0.3;
+                    notificationSound.play().catch(e => console.log("Sound play failed:", e));
+                }
+            },
+            typing: () => {
+                if (typingSound && state.soundEnabled) {
+                    typingSound.currentTime = 0;
+                    typingSound.volume = 0.1;
+                    typingSound.play().catch(e => console.log("Sound play failed:", e));
+                }
+            }
+        };
 
         // Initialize Application
         function init() {
-            console.log('🚀 Initializing Nexa AI Premium...');
+            console.log('🚀 Initializing Enhanced Nexa AI with Emotional Intelligence...');
             
             // Load saved state
             loadSavedState();
             
-            // Initialize UI components
-            initParticles();
+            // Initialize all systems
             initAvatarAnimations();
             initSpeechRecognition();
-            initTooltips();
-            initNavigation();
-            initWelcomeMessages();
-            
-            // Setup event listeners
             setupEventListeners();
             
-            // Show welcome notification
+            // Add welcome message
+            addMessage("Hello! I'm Nexa, your ultra-realistic AI assistant. I can help with life advice, creativity, relationships, career guidance, and more! 😊", 'ai', 'excited');
+            addMessage("Try asking about life purpose, creative blocks, or use the Quick Questions menu for instant guidance!", 'ai', 'helpful');
+            
+            // Show welcome notification with sound
             setTimeout(() => {
                 showNotification(
-                    'Welcome to Nexa AI Premium',
-                    'Experience sophisticated AI conversations with our premium assistant.',
+                    'Welcome to Nexa AI',
+                    'I\'m here to help with life advice, creativity, relationships, and more!',
                     'info'
                 );
+                soundLibrary.notification();
             }, 1000);
             
-            console.log('✅ Nexa AI Premium initialized successfully');
+            console.log('✅ Enhanced Nexa AI initialized successfully');
         }
 
         // Load Saved State
         function loadSavedState() {
-            // Load API key
-            if (state.apiKey) {
+            const savedApiKey = localStorage.getItem('nexa_gemini_api_key');
+            const savedConversation = localStorage.getItem('nexa_conversation');
+            const savedMood = localStorage.getItem('nexa_current_mood');
+            
+            if (savedApiKey) {
+                state.apiKey = savedApiKey;
                 apiKeyInput.value = '•'.repeat(16);
             }
             
-            // Load model selection
-            modelSelect.value = state.selectedModel;
-            
-            // Load conversation history
-            const savedHistory = localStorage.getItem('nexa_premium_conversation_history');
-            if (savedHistory) {
-                state.conversationHistory = JSON.parse(savedHistory);
-                renderConversationHistory();
+            if (savedConversation) {
+                state.conversationHistory = JSON.parse(savedConversation);
+                // Display recent conversation
+                displayRecentConversation();
             }
             
-            // Update UI based on state
-            updateUIState();
-        }
-
-        // Initialize Particles Background
-        function initParticles() {
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                createParticle();
+            if (savedMood) {
+                setMood(savedMood);
             }
             
-            console.log(`🎨 Created ${particleCount} background particles`);
+            state.soundEnabled = localStorage.getItem('nexa_sound_enabled') !== 'false';
         }
 
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            
-            // Random size (2-5px)
-            const size = Math.random() * 3 + 2;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
-            // Random position
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
-            
-            // Random color
-            const colors = [
-                'rgba(99, 102, 241, 0.4)',
-                'rgba(139, 92, 246, 0.3)',
-                'rgba(6, 182, 212, 0.3)',
-                'rgba(244, 63, 94, 0.2)'
-            ];
-            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Random animation
-            const duration = Math.random() * 30 + 20;
-            particle.style.animationDuration = `${duration}s`;
-            particle.style.animationDelay = `${Math.random() * 5}s`;
-            
-            particlesContainer.appendChild(particle);
-            
-            // Remove and recreate when animation ends
-            setTimeout(() => {
-                particle.remove();
-                createParticle();
-            }, duration * 1000);
-            
-            state.particles.push(particle);
+        // Display Recent Conversation
+        function displayRecentConversation() {
+            if (state.conversationHistory.length > 0) {
+                // Only show last 5 messages
+                const recentMessages = state.conversationHistory.slice(-10);
+                
+                recentMessages.forEach(msg => {
+                    if (msg.role === 'assistant') {
+                        addMessage(msg.content, 'ai', msg.emotion || 'default');
+                    } else {
+                        addMessage(msg.content, 'user');
+                    }
+                });
+            }
         }
 
-        // Initialize Avatar Animations
+        // Initialize Ultra Realistic Avatar Animations with Sounds
         function initAvatarAnimations() {
-            // Eye following cursor
+            // Random eye movements
+            state.eyeMovementInterval = setInterval(() => {
+                moveEyesRandomly();
+            }, 3000);
+            
+            // Natural blinking with sound
+            state.blinkInterval = setInterval(() => {
+                blinkEyes();
+                if (Math.random() > 0.7) soundLibrary.blink();
+            }, 4000);
+            
+            // Occasional subtle facial expressions
+            setInterval(() => {
+                if (!state.isAvatarTalking && Math.random() > 0.7) {
+                    animateSubtleFacialExpression();
+                }
+            }, 8000);
+            
+            // Cursor following (subtle)
             document.addEventListener('mousemove', (e) => {
                 if (state.isAvatarTalking) return;
                 
-                const eyes = document.querySelectorAll('.eye');
-                const container = document.querySelector('.human-avatar-container');
-                const rect = container.getBoundingClientRect();
+                const avatar = document.querySelector('.human-avatar-container');
+                const rect = avatar.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
                 const centerY = rect.top + rect.height / 2;
                 
-                const angleX = (e.clientX - centerX) / (rect.width / 2);
-                const angleY = (e.clientY - centerY) / (rect.height / 2);
+                const deltaX = (e.clientX - centerX) / (rect.width / 2);
+                const deltaY = (e.clientY - centerY) / (rect.height / 2);
                 
-                const maxOffset = 6;
-                const offsetX = angleX * maxOffset;
-                const offsetY = angleY * maxOffset;
+                const maxOffset = 8;
+                const offsetX = deltaX * maxOffset;
+                const offsetY = deltaY * maxOffset;
                 
-                eyes.forEach(eye => {
-                    eye.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-                });
-                
-                // Blink occasionally
-                if (Math.random() > 0.99) {
-                    blinkEyes();
-                }
+                leftEyeInner.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+                rightEyeInner.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
             });
             
-            // Random blinking
-            state.blinkInterval = setInterval(() => {
-                if (Math.random() > 0.7 && !state.isAvatarTalking) {
-                    blinkEyes();
-                }
-            }, 3000);
+            console.log('👁️ Ultra realistic avatar animations with sound initialized');
+        }
+
+        function moveEyesRandomly() {
+            if (state.isAvatarTalking) return;
             
-            // Subtle eyebrow movements
-            state.expressionInterval = setInterval(() => {
-                if (!state.isAvatarTalking) {
-                    animateSubtleExpression();
-                }
-            }, 5000);
+            const maxOffset = 5;
+            const leftX = (Math.random() * maxOffset * 2) - maxOffset;
+            const leftY = (Math.random() * maxOffset * 2) - maxOffset;
+            const rightX = (Math.random() * maxOffset * 2) - maxOffset;
+            const rightY = (Math.random() * maxOffset * 2) - maxOffset;
             
-            console.log('👁️ Avatar animations initialized');
+            leftEyeInner.style.transform = `translate(calc(-50% + ${leftX}px), calc(-50% + ${leftY}px))`;
+            rightEyeInner.style.transform = `translate(calc(-50% + ${rightX}px), calc(-50% + ${rightY}px))`;
         }
 
         function blinkEyes() {
-            const eyes = document.querySelectorAll('.eye');
-            eyes.forEach(eye => {
-                eye.style.height = '2px';
-                setTimeout(() => {
-                    eye.style.height = '44px';
-                }, 150);
-            });
+            if (state.isAvatarTalking) return;
+            
+            leftEyelid.style.transform = 'scaleY(0.1)';
+            rightEyelid.style.transform = 'scaleY(0.1)';
+            
+            setTimeout(() => {
+                leftEyelid.style.transform = 'scaleY(1)';
+                rightEyelid.style.transform = 'scaleY(1)';
+            }, 150);
         }
 
-        function animateSubtleExpression() {
-            const eyebrows = document.querySelectorAll('.eyebrow');
-            const mouthElement = document.getElementById('mouth');
+        function animateSubtleFacialExpression() {
+            const expressions = ['subtleSmile', 'thinkingFace', 'curiousLook'];
+            const expression = expressions[Math.floor(Math.random() * expressions.length)];
             
-            // Random eyebrow movement
-            eyebrows.forEach(eyebrow => {
-                const rotation = (Math.random() * 10) - 5;
-                eyebrow.style.transform = `rotate(${rotation}deg)`;
+            switch(expression) {
+                case 'subtleSmile':
+                    mouth.style.height = '35px';
+                    soundLibrary.smile();
+                    setTimeout(() => {
+                        if (!state.isAvatarTalking) mouth.style.height = '40px';
+                    }, 300);
+                    break;
+                case 'thinkingFace':
+                    document.querySelector('.eyebrow-left').style.transform = 'rotate(10deg)';
+                    document.querySelector('.eyebrow-right').style.transform = 'rotate(-10deg)';
+                    soundLibrary.thinking();
+                    setTimeout(() => {
+                        document.querySelector('.eyebrow-left').style.transform = 'rotate(5deg)';
+                        document.querySelector('.eyebrow-right').style.transform = 'rotate(-5deg)';
+                    }, 500);
+                    break;
+                case 'curiousLook':
+                    const avatar = document.querySelector('.human-avatar');
+                    avatar.style.transform = 'rotateY(5deg)';
+                    setTimeout(() => {
+                        avatar.style.transform = 'rotateY(0deg)';
+                    }, 300);
+                    break;
+            }
+        }
+
+        // Set Avatar Mood
+        function setMood(mood) {
+            state.currentMood = mood;
+            state.currentEmotion = mood;
+            localStorage.setItem('nexa_current_mood', mood);
+            
+            // Update UI
+            const emotionEmojis = {
+                'default': '😊 Neutral',
+                'thinking': '🤔 Thinking',
+                'happy': '😄 Happy',
+                'excited': '🌟 Excited'
+            };
+            avatarEmotion.textContent = emotionEmojis[mood] || '😊 Neutral';
+            
+            // Update active button
+            moodButtons.forEach(btn => {
+                if (btn.dataset.mood === mood) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
             });
             
-            // Subtle mouth movement
-            if (Math.random() > 0.5) {
-                mouthElement.style.height = '18px';
-                setTimeout(() => {
-                    if (!state.isAvatarTalking) {
-                        mouthElement.style.height = '22px';
-                    }
-                }, 300);
+            // Apply visual effects
+            const avatar = document.querySelector('.human-avatar');
+            avatar.className = 'human-avatar';
+            if (mood !== 'default') {
+                avatar.classList.add(`emotion-${mood}`);
             }
+            
+            // Play mood-appropriate sound
+            if (mood === 'happy' || mood === 'excited') {
+                soundLibrary.smile();
+            } else if (mood === 'thinking') {
+                soundLibrary.thinking();
+            }
+            
+            console.log(`🎭 Mood set to: ${mood}`);
         }
 
         // Initialize Speech Recognition
@@ -2490,42 +1998,32 @@
                 state.recognition.continuous = false;
                 state.recognition.interimResults = true;
                 state.recognition.lang = 'en-US';
-                state.recognition.maxAlternatives = 1;
                 
                 state.recognition.onstart = () => {
                     state.isListening = true;
                     voiceBtn.classList.add('listening');
                     voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
-                    statusText.textContent = 'Listening... Speak now';
-                    showNotification('Voice Input Active', 'I\'m listening. Speak clearly into your microphone.', 'info');
+                    statusText.textContent = 'Listening...';
+                    showNotification('Voice Input', 'Speak now...', 'info');
                     
-                    // Animate avatar while listening
+                    // Animate mouth while listening
                     mouth.classList.add('talking');
+                    soundLibrary.notification();
                 };
                 
                 state.recognition.onresult = (event) => {
                     let finalTranscript = '';
-                    let interimTranscript = '';
                     
                     for (let i = event.resultIndex; i < event.results.length; i++) {
                         const transcript = event.results[i][0].transcript;
                         if (event.results[i].isFinal) {
                             finalTranscript += transcript;
-                        } else {
-                            interimTranscript += transcript;
                         }
                     }
                     
-                    // Update input with interim results
-                    if (interimTranscript) {
-                        chatInput.value = interimTranscript;
-                        chatInput.focus();
-                    }
-                    
-                    // If we have final results, send the message
                     if (finalTranscript) {
                         chatInput.value = finalTranscript;
-                        sendMessage();
+                        setTimeout(() => sendMessage(), 500);
                     }
                 };
                 
@@ -2533,118 +2031,22 @@
                     state.isListening = false;
                     voiceBtn.classList.remove('listening');
                     voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-                    statusText.textContent = 'Premium Demo Mode';
+                    statusText.textContent = state.isConnected ? 'Gemini Connected' : 'Demo Mode';
                     mouth.classList.remove('talking');
                 };
                 
                 state.recognition.onerror = (event) => {
-                    console.error('Speech recognition error:', event.error);
-                    showNotification('Voice Input Error', `Error: ${event.error}. Please try again.`, 'error');
+                    showNotification('Voice Error', `Error: ${event.error}`, 'error');
                     voiceBtn.classList.remove('listening');
                     voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-                    statusText.textContent = 'Premium Demo Mode';
                 };
                 
                 console.log('🎤 Speech recognition initialized');
             } else {
                 console.warn('Speech recognition not supported');
                 voiceBtn.style.opacity = '0.5';
-                voiceBtn.title = "Voice input not supported in this browser";
-                showNotification('Feature Not Available', 'Voice recognition is not supported in your browser.', 'warning');
+                voiceBtn.title = "Voice input not supported";
             }
-        }
-
-        // Initialize Tooltips
-        function initTooltips() {
-            const tooltipElements = document.querySelectorAll('[data-tooltip]');
-            
-            tooltipElements.forEach(element => {
-                element.addEventListener('mouseenter', (e) => {
-                    const tooltipText = element.getAttribute('data-tooltip');
-                    const tooltip = document.createElement('div');
-                    tooltip.className = 'tooltip';
-                    tooltip.textContent = tooltipText;
-                    tooltip.style.position = 'absolute';
-                    tooltip.style.background = 'var(--glass-dark)';
-                    tooltip.style.color = 'white';
-                    tooltip.style.padding = '8px 12px';
-                    tooltip.style.borderRadius = '8px';
-                    tooltip.style.fontSize = '12px';
-                    tooltip.style.whiteSpace = 'nowrap';
-                    tooltip.style.zIndex = '1000';
-                    tooltip.style.backdropFilter = 'blur(10px)';
-                    tooltip.style.border = '1px solid var(--glass-border)';
-                    tooltip.style.boxShadow = 'var(--shadow-light)';
-                    tooltip.style.pointerEvents = 'none';
-                    
-                    document.body.appendChild(tooltip);
-                    
-                    const rect = element.getBoundingClientRect();
-                    tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
-                    tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
-                    
-                    element._tooltip = tooltip;
-                });
-                
-                element.addEventListener('mouseleave', () => {
-                    if (element._tooltip) {
-                        element._tooltip.remove();
-                        delete element._tooltip;
-                    }
-                });
-            });
-            
-            console.log('💡 Tooltips initialized');
-        }
-
-        // Initialize Navigation
-        function initNavigation() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Remove active class from all links
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    
-                    // Add active class to clicked link
-                    link.classList.add('active');
-                    
-                    // Show notification
-                    const text = link.textContent.trim();
-                    showNotification('Navigation', `Navigating to ${text}`, 'info');
-                    
-                    // Add click animation
-                    link.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        link.style.transform = '';
-                    }, 150);
-                });
-            });
-            
-            // Logo click effect
-            logo.addEventListener('click', () => {
-                logo.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    logo.style.transform = '';
-                }, 150);
-                
-                showNotification('Nexa AI', 'Welcome to premium AI assistant experience', 'info');
-            });
-            
-            console.log('🧭 Navigation initialized');
-        }
-
-        // Initialize Welcome Messages
-        function initWelcomeMessages() {
-            const welcomeMessage = welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-            addMessage(welcomeMessage, 'ai');
-            
-            // Add a follow-up suggestion
-            setTimeout(() => {
-                addMessage("Try asking me about AI capabilities, request coding help, or explore creative writing!", 'ai');
-            }, 500);
         }
 
         // Setup Event Listeners
@@ -2661,57 +2063,220 @@
             // Voice input
             voiceBtn.addEventListener('click', toggleVoiceInput);
             
-            // Control cards
-            demoControl.addEventListener('click', () => activateControl('demo'));
-            voiceControl.addEventListener('click', () => activateControl('voice'));
-            apiControl.addEventListener('click', () => activateControl('api'));
-            settingsControl.addEventListener('click', () => activateControl('settings'));
+            // Connect button
+            connectBtn.addEventListener('click', () => {
+                if (state.isConnected) {
+                    disconnectFromAPI();
+                } else {
+                    connectToAPI();
+                }
+            });
             
-            // Status action
-            statusAction.addEventListener('click', handleStatusAction);
+            // Test connection
+            testConnection.addEventListener('click', testGeminiConnection);
             
             // API key visibility toggle
-            toggleApiKey.addEventListener('click', toggleApiKeyVisibility);
-            
-            // Model selection
-            modelSelect.addEventListener('change', handleModelChange);
+            toggleApiKey.addEventListener('click', () => {
+                if (apiKeyInput.type === 'password') {
+                    apiKeyInput.type = 'text';
+                    toggleApiKey.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    apiKeyInput.type = 'password';
+                    toggleApiKey.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            });
             
             // API key input
-            apiKeyInput.addEventListener('input', handleApiKeyInput);
+            apiKeyInput.addEventListener('input', (e) => {
+                if (e.target.value && !e.target.value.startsWith('••••••••••••••••')) {
+                    state.apiKey = e.target.value;
+                    localStorage.setItem('nexa_gemini_api_key', state.apiKey);
+                }
+            });
+            
+            // Quick questions navigation
+            navQuestions.addEventListener('click', (e) => {
+                e.preventDefault();
+                quickQuestions.classList.toggle('show');
+                navHome.classList.remove('active');
+                navQuestions.classList.add('active');
+            });
+            
+            navHome.addEventListener('click', (e) => {
+                e.preventDefault();
+                quickQuestions.classList.remove('show');
+                navQuestions.classList.remove('active');
+                navHome.classList.add('active');
+            });
+            
+            // Mood buttons
+            moodButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const mood = btn.dataset.mood;
+                    setMood(mood);
+                });
+            });
+            
+            // Question buttons
+            questionButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const questionType = btn.dataset.question;
+                    askQuickQuestion(questionType);
+                    quickQuestions.classList.remove('show');
+                    navQuestions.classList.remove('active');
+                    navHome.classList.add('active');
+                });
+            });
             
             // Notification close
             notificationClose.addEventListener('click', closeNotification);
             
-            // API option clicks
-            geminiOption.addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('Google Gemini', 'Opening Google AI Studio to get your free API key...', 'info');
-                setTimeout(() => {
-                    window.open('https://makersuite.google.com/app/apikey', '_blank');
-                }, 500);
-            });
-            
-            cohereOption.addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('Cohere API', 'Opening Cohere dashboard to get your free API key...', 'info');
-                setTimeout(() => {
-                    window.open('https://dashboard.cohere.com/api-keys', '_blank');
-                }, 500);
-            });
-            
-            // Input focus effects
-            chatInput.addEventListener('focus', () => {
-                chatInput.parentElement.style.transform = 'translateY(-2px)';
-            });
-            
-            chatInput.addEventListener('blur', () => {
-                chatInput.parentElement.style.transform = '';
-            });
-            
             console.log('🎮 Event listeners setup complete');
         }
 
-        // Send Message
+        // Ask Quick Question
+        function askQuickQuestion(type) {
+            const category = knowledgeBase[type];
+            if (!category || category.length === 0) return;
+            
+            const randomQuestion = category[Math.floor(Math.random() * category.length)];
+            
+            // Add question to chat
+            addMessage(randomQuestion.question, 'user');
+            
+            // Show typing indicator with sound
+            showTypingIndicator();
+            soundLibrary.typing();
+            
+            // Set appropriate mood
+            setMood(randomQuestion.mood);
+            
+            // Simulate thinking delay
+            setTimeout(() => {
+                removeTypingIndicator();
+                addMessage(randomQuestion.answer, 'ai', randomQuestion.emotion);
+                animateAvatarTalking(randomQuestion.answer.length);
+                
+                // Save to conversation history
+                state.conversationHistory.push({
+                    role: 'user',
+                    content: randomQuestion.question,
+                    timestamp: new Date().toISOString()
+                });
+                
+                state.conversationHistory.push({
+                    role: 'assistant',
+                    content: randomQuestion.answer,
+                    emotion: randomQuestion.emotion,
+                    timestamp: new Date().toISOString()
+                });
+                
+                saveConversationHistory();
+                
+            }, 1500 + Math.random() * 1000);
+        }
+
+        // Test Gemini API Connection
+        async function testGeminiConnection() {
+            const apiKey = apiKeyInput.value;
+            
+            if (!apiKey || apiKey.startsWith('••••••••••••••••')) {
+                showNotification('No API Key', 'Please enter your Gemini API key first', 'warning');
+                apiKeyInput.focus();
+                return;
+            }
+            
+            // Show testing state
+            testConnection.disabled = true;
+            testConnection.classList.add('testing');
+            testConnection.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Connection...';
+            
+            try {
+                // Store the key
+                state.apiKey = apiKey;
+                localStorage.setItem('nexa_gemini_api_key', apiKey);
+                
+                // Test with a simple request
+                const response = await axios.post(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+                    {
+                        contents: [{
+                            parts: [{
+                                text: "Hello"
+                            }]
+                        }],
+                        generationConfig: {
+                            maxOutputTokens: 10
+                        }
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        timeout: 10000
+                    }
+                );
+                
+                if (response.data && response.data.candidates && response.data.candidates[0]) {
+                    // Connection successful
+                    testConnection.classList.remove('testing');
+                    testConnection.classList.add('connected');
+                    testConnection.innerHTML = '<i class="fas fa-check"></i> Connected to Gemini!';
+                    
+                    showNotification(
+                        'Connection Successful!',
+                        'Successfully connected to Google Gemini API.',
+                        'success'
+                    );
+                    soundLibrary.notification();
+                    
+                    // Enable connection
+                    state.isConnected = true;
+                    state.isDemoMode = false;
+                    updateUIState();
+                    
+                    // Add success message to chat
+                    addMessage("✅ Successfully connected to Google Gemini! I'm now powered by real AI with enhanced emotional intelligence. How can I assist you today?", 'ai', 'excited');
+                    
+                } else {
+                    throw new Error('Invalid response from Gemini API');
+                }
+                
+            } catch (error) {
+                console.error('Gemini API test failed:', error);
+                
+                testConnection.classList.remove('testing');
+                testConnection.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+                testConnection.disabled = false;
+                
+                let errorMessage = 'Failed to connect to Gemini API. ';
+                
+                if (error.response) {
+                    if (error.response.status === 400) {
+                        errorMessage += 'Invalid API key or request format.';
+                    } else if (error.response.status === 403) {
+                        errorMessage += 'API key is invalid or disabled.';
+                    } else if (error.response.status === 429) {
+                        errorMessage += 'Rate limit exceeded. Try again later.';
+                    } else {
+                        errorMessage += `Server error: ${error.response.status}`;
+                    }
+                } else if (error.request) {
+                    errorMessage += 'No response from server. Check your internet connection.';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                showNotification('Connection Failed', errorMessage, 'error');
+                
+                // Clear invalid key
+                state.apiKey = '';
+                localStorage.removeItem('nexa_gemini_api_key');
+                apiKeyInput.value = '';
+            }
+        }
+
+        // Send Message with Enhanced Responses
         async function sendMessage() {
             const message = chatInput.value.trim();
             if (!message || state.isTyping) return;
@@ -2722,105 +2287,335 @@
             // Add user message
             addMessage(message, 'user');
             
-            // Add to conversation history
-            state.conversationHistory.push({
-                role: 'user',
-                content: message,
-                timestamp: new Date().toISOString()
-            });
-            
-            // Show typing indicator
+            // Show typing indicator with sound
             showTypingIndicator();
+            soundLibrary.typing();
             state.isTyping = true;
             chatInput.disabled = true;
             sendBtn.disabled = true;
             
-            // Simulate AI thinking
-            await simulateAIThinking();
-            
-            // Remove typing indicator
-            removeTypingIndicator();
-            state.isTyping = false;
-            
-            // Generate AI response
-            const aiResponse = generateAIResponse(message);
-            
-            // Add AI response
-            addMessage(aiResponse, 'ai');
-            
-            // Animate avatar while talking
-            animateAvatarTalking(aiResponse.length);
-            
-            // Add to conversation history
-            state.conversationHistory.push({
-                role: 'assistant',
-                content: aiResponse,
-                timestamp: new Date().toISOString()
-            });
-            
-            // Save conversation history
-            localStorage.setItem('nexa_premium_conversation_history', JSON.stringify(state.conversationHistory));
-            
-            // Re-enable input
-            chatInput.disabled = false;
-            sendBtn.disabled = false;
-            chatInput.focus();
-            
-            // Show notification for long responses
-            if (aiResponse.length > 200) {
-                showNotification('Response Generated', 'AI has provided a detailed response to your query.', 'success');
+            try {
+                let aiResponse;
+                let emotion = 'default';
+                
+                if (state.isConnected && state.apiKey) {
+                    // REAL GEMINI API CALL with emotional context
+                    const prompt = `Respond as an emotionally intelligent AI assistant. The user asked: "${message}" 
+                    
+                    Consider their emotional state and respond appropriately. You can be:
+                    - Encouraging and supportive for life advice
+                    - Creative and inspiring for creativity questions
+                    - Practical and clear for career advice
+                    - Empathetic and understanding for relationship issues
+                    - Motivational for motivation questions
+                    - Analytical for problem-solving
+                    - Calming for stress/anxiety
+                    - Enthusiastic for learning
+                    
+                    Add appropriate emotional tone indicators in your response.`;
+                    
+                    aiResponse = await callGeminiAPI(prompt);
+                    
+                    // Analyze response for emotional tone
+                    emotion = analyzeEmotion(aiResponse);
+                    
+                } else {
+                    // Enhanced demo mode with emotional responses
+                    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+                    
+                    // Check for keywords to provide appropriate response
+                    if (message.toLowerCase().includes('life') || message.includes('purpose') || message.includes('happiness')) {
+                        const lifeResponses = knowledgeBase.life_advice;
+                        const randomResponse = lifeResponses[Math.floor(Math.random() * lifeResponses.length)];
+                        aiResponse = randomResponse.answer;
+                        emotion = randomResponse.emotion;
+                        setMood(randomResponse.mood);
+                    } else if (message.toLowerCase().includes('creative') || message.includes('art') || message.includes('inspiration')) {
+                        const creativeResponses = knowledgeBase.creativity;
+                        const randomResponse = creativeResponses[Math.floor(Math.random() * creativeResponses.length)];
+                        aiResponse = randomResponse.answer;
+                        emotion = randomResponse.emotion;
+                        setMood(randomResponse.mood);
+                    } else {
+                        // Generic enhanced response
+                        aiResponse = getEnhancedDemoResponse(message);
+                        emotion = analyzeEmotion(aiResponse);
+                    }
+                }
+                
+                // Remove typing indicator
+                removeTypingIndicator();
+                state.isTyping = false;
+                
+                // Add AI response with emotion
+                addMessage(aiResponse, 'ai', emotion);
+                
+                // Animate avatar with emotional response
+                animateAvatarTalking(aiResponse.length);
+                
+                // Save to conversation history
+                state.conversationHistory.push({
+                    role: 'user',
+                    content: message,
+                    timestamp: new Date().toISOString()
+                });
+                
+                state.conversationHistory.push({
+                    role: 'assistant',
+                    content: aiResponse,
+                    emotion: emotion,
+                    timestamp: new Date().toISOString()
+                });
+                
+                saveConversationHistory();
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                
+                removeTypingIndicator();
+                state.isTyping = false;
+                
+                let errorMessage = 'Sorry, there was an error processing your request. ';
+                
+                if (error.response) {
+                    if (error.response.status === 429) {
+                        errorMessage = 'Rate limit exceeded. Please wait a moment before trying again.';
+                        showNotification('Rate Limit', 'Gemini API rate limit exceeded. Try again in a minute.', 'warning');
+                    } else if (error.response.status === 403) {
+                        errorMessage = 'API key authentication failed. Please check your API key.';
+                        state.isConnected = false;
+                        state.isDemoMode = true;
+                        updateUIState();
+                        showNotification('Authentication Failed', 'Invalid API key. Please reconnect.', 'error');
+                    } else {
+                        errorMessage += `API Error: ${error.response.status}`;
+                    }
+                } else if (error.request) {
+                    errorMessage = 'Network error. Please check your internet connection.';
+                }
+                
+                addMessage(errorMessage, 'ai', 'sad');
+                
+                // If API failed, switch to demo mode
+                if (state.isConnected) {
+                    state.isConnected = false;
+                    state.isDemoMode = true;
+                    updateUIState();
+                    showNotification('Switching to Demo', 'API connection failed. Using enhanced demo mode.', 'warning');
+                }
+            } finally {
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
+                chatInput.focus();
             }
         }
 
-        // Simulate AI Thinking
-        function simulateAIThinking() {
-            return new Promise(resolve => {
-                // Variable delay based on message complexity
-                const baseDelay = 1000;
-                const complexityDelay = Math.min(3000, state.conversationHistory.length * 200);
-                const totalDelay = baseDelay + complexityDelay + Math.random() * 1000;
-                
-                setTimeout(resolve, totalDelay);
-            });
+        // Enhanced Demo Response Generator
+        function getEnhancedDemoResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            const responses = {
+                greeting: [
+                    "Hello! I'm excited to help you today! 😊 How can I assist with your questions about life, creativity, or anything else on your mind?",
+                    "Hi there! I'm here to provide thoughtful advice and creative inspiration. What would you like to explore today?",
+                    "Welcome back! I'm ready to help you navigate life's challenges and unlock your creativity. What's on your mind?"
+                ],
+                life: [
+                    "Life is a journey of continuous growth. Remember that challenges are opportunities in disguise, and every experience shapes who you become. What specific aspect of life would you like to discuss?",
+                    "Finding meaning often comes from helping others and pursuing what genuinely interests you. Small daily actions create significant long-term results.",
+                    "Happiness is often found in the present moment. Practice mindfulness and gratitude - they're scientifically proven to increase life satisfaction."
+                ],
+                creativity: [
+                    "Creativity is like a muscle - it strengthens with practice. Try setting aside 15 minutes daily for creative play without expectations of results.",
+                    "Creative blocks often come from perfectionism. Give yourself permission to create 'bad' art - it's the fastest way to breakthrough.",
+                    "Inspiration is everywhere! Take a walk in nature, visit a museum, or try a completely new experience to spark fresh ideas."
+                ],
+                career: [
+                    "A fulfilling career aligns with your values, utilizes your strengths, and addresses problems you care about solving.",
+                    "Career growth often happens outside your comfort zone. Seek challenges that stretch your abilities while providing support systems."
+                ],
+                relationships: [
+                    "Healthy relationships thrive on clear communication, mutual respect, and shared values. Remember to listen as much as you speak.",
+                    "Boundaries aren't walls - they're gates that define what you're willing to accept while maintaining connection."
+                ],
+                default: [
+                    "That's an interesting perspective! I'd love to explore this topic with you in more depth. Could you tell me more about what you're thinking?",
+                    "Thanks for sharing! I'm designed to provide thoughtful, nuanced responses to complex questions. What aspect would you like to focus on?",
+                    "I appreciate your question! With emotional intelligence and contextual understanding, I can provide personalized guidance on this topic."
+                ]
+            };
+            
+            // Determine which category the message falls into
+            let category = 'default';
+            
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                category = 'greeting';
+            } else if (lowerMessage.includes('life') || lowerMessage.includes('purpose') || lowerMessage.includes('meaning')) {
+                category = 'life';
+            } else if (lowerMessage.includes('creative') || lowerMessage.includes('art') || lowerMessage.includes('inspire')) {
+                category = 'creativity';
+            } else if (lowerMessage.includes('career') || lowerMessage.includes('job') || lowerMessage.includes('work')) {
+                category = 'career';
+            } else if (lowerMessage.includes('relationship') || lowerMessage.includes('friend') || lowerMessage.includes('partner')) {
+                category = 'relationships';
+            }
+            
+            const categoryResponses = responses[category];
+            return categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
         }
 
-        // Generate AI Response
-        function generateAIResponse(userMessage) {
-            if (state.isDemoMode) {
-                // Demo mode - enhanced simulated responses
-                const responseType = Math.floor(Math.random() * demoResponses.length);
-                const baseResponse = demoResponses[responseType];
-                
-                // Add personalized touch
-                const personalizedResponses = [
-                    `Based on your question about "${userMessage.substring(0, 30)}...", ${baseResponse.text.toLowerCase()}`,
-                    `Regarding "${userMessage.substring(0, 25)}...", ${baseResponse.text.toLowerCase()}`,
-                    `${baseResponse.text} This demonstrates how I would respond to questions like "${userMessage.substring(0, 20)}..."`
-                ];
-                
-                return personalizedResponses[Math.floor(Math.random() * personalizedResponses.length)];
+        // Analyze Emotion from Text
+        function analyzeEmotion(text) {
+            const lowerText = text.toLowerCase();
+            
+            if (lowerText.includes('excited') || lowerText.includes('amazing') || lowerText.includes('wonderful') || 
+                lowerText.includes('congratulation') || lowerText.includes('🎉') || lowerText.includes('🌟')) {
+                return 'excited';
+            } else if (lowerText.includes('sad') || lowerText.includes('sorry') || lowerText.includes('unfortunately') ||
+                      lowerText.includes('difficult') || lowerText.includes('challenging')) {
+                return 'sad';
+            } else if (lowerText.includes('think') || lowerText.includes('consider') || lowerText.includes('analyze') ||
+                      lowerText.includes('perhaps') || lowerText.includes('maybe')) {
+                return 'thinking';
+            } else if (lowerText.includes('happy') || lowerText.includes('great') || lowerText.includes('good') ||
+                      lowerText.includes('😊') || lowerText.includes('👍')) {
+                return 'happy';
+            } else if (lowerText.includes('important') || lowerText.includes('remember') || lowerText.includes('key') ||
+                      lowerText.includes('essential')) {
+                return 'serious';
             } else {
-                // Real AI mode (placeholder for API integration)
-                return "Real AI response would be generated here with API integration. Connect an API key to unlock this feature.";
+                return 'default';
             }
         }
 
-        // Add Message to Chat
-        function addMessage(text, sender) {
+        // REAL Gemini API Call Function
+        async function callGeminiAPI(prompt) {
+            const response = await axios.post(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${state.apiKey}`,
+                {
+                    contents: [
+                        {
+                            role: "user",
+                            parts: [{ text: prompt }]
+                        }
+                    ],
+                    generationConfig: {
+                        temperature: 0.8,
+                        topK: 1,
+                        topP: 0.95,
+                        maxOutputTokens: 1024
+                    },
+                    safetySettings: [
+                        {
+                            category: "HARM_CATEGORY_HARASSMENT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_HATE_SPEECH",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        }
+                    ]
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    timeout: 30000
+                }
+            );
+            
+            if (response.data && response.data.candidates && response.data.candidates[0]) {
+                return response.data.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error('Invalid response from Gemini API');
+            }
+        }
+
+        // Save Conversation History
+        function saveConversationHistory() {
+            if (state.conversationHistory.length > 50) {
+                state.conversationHistory = state.conversationHistory.slice(-50);
+            }
+            localStorage.setItem('nexa_conversation', JSON.stringify(state.conversationHistory));
+        }
+
+        // Update UI State
+        function updateUIState() {
+            if (state.isConnected) {
+                statusText.textContent = 'Gemini Connected';
+                connectBtn.textContent = 'Disconnect';
+                connectionStatus.textContent = 'Gemini API Connected';
+                modelStatus.textContent = 'Gemini Pro + Emotional AI';
+                chatInput.placeholder = 'Ask me anything with emotional intelligence...';
+            } else {
+                statusText.textContent = 'Enhanced Demo Mode';
+                connectBtn.textContent = 'Connect API';
+                connectionStatus.textContent = 'Enhanced Demo';
+                modelStatus.textContent = 'Emotional AI Simulator';
+                chatInput.placeholder = 'Try enhanced demo or connect API for real AI...';
+            }
+        }
+
+        // Toggle Voice Input
+        function toggleVoiceInput() {
+            if (!state.recognition) {
+                showNotification('Not Supported', 'Voice recognition not available', 'error');
+                return;
+            }
+            
+            if (!state.isListening) {
+                try {
+                    state.recognition.start();
+                } catch (error) {
+                    showNotification('Microphone Error', 'Could not access microphone', 'error');
+                }
+            } else {
+                state.recognition.stop();
+            }
+        }
+
+        // Add Message to Chat with Emotion
+        function addMessage(text, sender, emotion = 'default') {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
             
+            if (sender === 'ai' && emotion) {
+                messageDiv.setAttribute('data-emotion', getEmotionLabel(emotion));
+            }
+            
             const time = new Date().toLocaleTimeString([], { 
                 hour: '2-digit', 
-                minute: '2-digit',
-                hour12: true 
+                minute: '2-digit' 
             });
             
-            const messageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const messageId = `msg-${Date.now()}`;
             messageDiv.id = messageId;
             
-            // Format message with line breaks for better readability
-            const formattedText = text.replace(/\n/g, '<br>');
+            // Format message with line breaks and emotion indicators
+            let formattedText = text;
+            
+            // Add emotional indicators based on emotion
+            if (sender === 'ai') {
+                const emotionIndicators = {
+                    'excited': '🌟 ',
+                    'happy': '😊 ',
+                    'thinking': '🤔 ',
+                    'sad': '💭 ',
+                    'serious': '📌 ',
+                    'default': '💬 '
+                };
+                formattedText = (emotionIndicators[emotion] || '💬 ') + text;
+            }
+            
+            formattedText = formattedText.replace(/\n/g, '<br>');
             
             messageDiv.innerHTML = `
                 ${sender === 'ai' ? `
@@ -2836,21 +2631,6 @@
                         <i class="fas fa-user"></i>
                     </div>
                 ` : ''}
-                
-                <span class="message-time">
-                    <i class="far fa-clock"></i> ${time}
-                </span>
-                
-                <div class="message-actions">
-                    <button class="message-action" onclick="copyMessage('${messageId}')" title="Copy message">
-                        <i class="far fa-copy"></i>
-                    </button>
-                    ${sender === 'ai' ? `
-                        <button class="message-action" onclick="speakMessage('${messageId}')" title="Speak message">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                    ` : ''}
-                </div>
             `;
             
             chatMessages.appendChild(messageDiv);
@@ -2860,48 +2640,20 @@
                 behavior: 'smooth', 
                 block: 'end' 
             });
-            
-            // Add animation
-            messageDiv.style.animation = 'messageSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
         }
 
-        // Copy Message Function
-        window.copyMessage = function(messageId) {
-            const messageDiv = document.getElementById(messageId);
-            const messageText = messageDiv.querySelector('.message-bubble').textContent;
-            
-            navigator.clipboard.writeText(messageText).then(() => {
-                showNotification('Copied!', 'Message copied to clipboard', 'success');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-                showNotification('Error', 'Failed to copy message', 'error');
-            });
-        };
-
-        // Speak Message Function
-        window.speakMessage = function(messageId) {
-            const messageDiv = document.getElementById(messageId);
-            const messageText = messageDiv.querySelector('.message-bubble').textContent;
-            
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(messageText);
-                utterance.rate = 1.0;
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
-                utterance.lang = 'en-US';
-                
-                // Animate avatar while speaking
-                animateAvatarTalking(messageText.length);
-                
-                utterance.onend = () => {
-                    console.log('Speech synthesis finished');
-                };
-                
-                speechSynthesis.speak(utterance);
-            } else {
-                showNotification('Not Supported', 'Text-to-speech not supported in this browser', 'error');
-            }
-        };
+        // Get Emotion Label
+        function getEmotionLabel(emotion) {
+            const labels = {
+                'excited': '🌟 Excited',
+                'happy': '😊 Happy',
+                'thinking': '🤔 Thinking',
+                'sad': '💭 Reflective',
+                'serious': '📌 Important',
+                'default': '💬 Neutral'
+            };
+            return labels[emotion] || '💬 Neutral';
+        }
 
         // Show Typing Indicator
         function showTypingIndicator() {
@@ -2913,10 +2665,12 @@
                 <div class="message-avatar">
                     <i class="fas fa-robot"></i>
                 </div>
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
+                <div class="message-bubble">
+                    <div style="display: flex; gap: 6px; padding: 10px;">
+                        <div style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: typingBounce 1.4s infinite ease-in-out;"></div>
+                        <div style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: typingBounce 1.4s infinite ease-in-out; animation-delay: -0.32s;"></div>
+                        <div style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: typingBounce 1.4s infinite ease-in-out; animation-delay: -0.16s;"></div>
+                    </div>
                 </div>
             `;
             
@@ -2932,191 +2686,53 @@
             }
         }
 
-        // Animate Avatar Talking
+        // Animate Avatar Talking with Emotional Expressions
         function animateAvatarTalking(durationFactor) {
             if (state.isAvatarTalking) return;
             
             state.isAvatarTalking = true;
             mouth.classList.add('talking');
             
-            // Calculate duration based on text length
-            const duration = Math.min(5000, Math.max(1000, durationFactor * 10));
+            // Add emotional expression based on current mood
+            switch(state.currentMood) {
+                case 'excited':
+                    // Wider mouth animation for excitement
+                    mouth.style.width = '130px';
+                    break;
+                case 'thinking':
+                    // Subtler mouth movement for thinking
+                    mouth.style.height = '30px';
+                    break;
+                case 'happy':
+                    // Smiling animation
+                    mouth.style.borderRadius = '50%';
+                    break;
+            }
             
-            // Animate eyes slightly during speech
-            const eyes = document.querySelectorAll('.eye');
-            eyes.forEach(eye => {
-                eye.style.transform = 'translate(0, 2px)';
-            });
+            // Calculate duration based on text length
+            const duration = Math.min(5000, Math.max(1000, durationFactor * 15));
             
             setTimeout(() => {
                 mouth.classList.remove('talking');
                 state.isAvatarTalking = false;
                 
-                // Reset eyes
-                eyes.forEach(eye => {
-                    eye.style.transform = '';
-                });
+                // Reset mouth to normal
+                mouth.style.width = '120px';
+                mouth.style.height = '40px';
+                mouth.style.borderRadius = '0 0 60px 60px';
             }, duration);
         }
 
-        // Toggle Voice Input
-        function toggleVoiceInput() {
-            if (!state.recognition) {
-                showNotification('Not Supported', 'Voice recognition not available', 'error');
-                return;
-            }
-            
-            if (!state.isListening) {
-                try {
-                    state.recognition.start();
-                } catch (error) {
-                    console.error('Speech recognition start error:', error);
-                    showNotification('Microphone Error', 'Could not access microphone. Please check permissions.', 'error');
-                }
-            } else {
-                state.recognition.stop();
-            }
-        }
-
-        // Activate Control
-        function activateControl(control) {
-            // Remove active class from all controls
-            [demoControl, voiceControl, apiControl, settingsControl].forEach(card => {
-                card.classList.remove('active');
-            });
-            
-            // Add active class to selected control
-            switch(control) {
-                case 'demo':
-                    demoControl.classList.add('active');
-                    state.activeControl = 'demo';
-                    showNotification('Demo Mode', 'Try the AI assistant without any setup. Ask me anything!', 'info');
-                    break;
-                    
-                case 'voice':
-                    voiceControl.classList.add('active');
-                    state.activeControl = 'voice';
-                    if (state.recognition) {
-                        showNotification('Voice Chat', 'Click the microphone button to start speaking.', 'info');
-                    }
-                    break;
-                    
-                case 'api':
-                    apiControl.classList.add('active');
-                    state.activeControl = 'api';
-                    showNotification('API Setup', 'Configure your API settings or get a free API key.', 'info');
-                    break;
-                    
-                case 'settings':
-                    settingsControl.classList.add('active');
-                    state.activeControl = 'settings';
-                    showNotification('Settings', 'Customize your AI assistant experience.', 'info');
-                    break;
-            }
-        }
-
-        // Handle Status Action
-        function handleStatusAction() {
-            if (state.isDemoMode) {
-                showNotification('Connect API', 'Switch from demo mode to real AI by connecting an API key.', 'info');
-                activateControl('api');
-                apiKeyInput.focus();
-            } else {
-                showNotification('Disconnect', 'Switching back to demo mode...', 'info');
-                state.isDemoMode = true;
-                updateUIState();
-            }
-        }
-
-        // Toggle API Key Visibility
-        function toggleApiKeyVisibility() {
-            if (apiKeyInput.type === 'password') {
-                apiKeyInput.type = 'text';
-                toggleApiKey.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                toggleApiKey.title = 'Hide API key';
-            } else {
-                apiKeyInput.type = 'password';
-                toggleApiKey.innerHTML = '<i class="fas fa-eye"></i>';
-                toggleApiKey.title = 'Show API key';
-            }
-        }
-
-        // Handle Model Change
-        function handleModelChange() {
-            state.selectedModel = modelSelect.value;
-            localStorage.setItem('nexa_premium_model', state.selectedModel);
-            
-            const selectedOption = modelSelect.options[modelSelect.selectedIndex];
-            showNotification('Model Changed', `Selected: ${selectedOption.text}`, 'success');
-            
-            if (state.selectedModel === 'demo') {
-                state.isDemoMode = true;
-                updateUIState();
-            }
-        }
-
-        // Handle API Key Input
-        function handleApiKeyInput() {
-            const value = apiKeyInput.value;
-            
-            if (value && !value.startsWith('••••••••••••••••')) {
-                state.apiKey = value;
-                localStorage.setItem('nexa_premium_api_key', value);
-                
-                if (value.length > 10) {
-                    showNotification('API Key Saved', 'API key has been saved locally.', 'success');
-                }
-            }
-        }
-
-        // Update UI State
-        function updateUIState() {
-            if (state.isDemoMode) {
-                statusText.textContent = 'Premium Demo Mode';
-                statusAction.textContent = 'Connect API';
-                chatInput.placeholder = 'Ask me anything in demo mode...';
-            } else {
-                statusText.textContent = 'API Connected';
-                statusAction.textContent = 'Disconnect';
-                chatInput.placeholder = 'Ask me anything with real AI...';
-            }
-            
-            // Update control states
-            demoControl.classList.toggle('active', state.isDemoMode);
-            apiControl.classList.toggle('active', !state.isDemoMode);
-        }
-
-        // Show Notification
+        // Show Notification with Sound
         function showNotification(title, message, type = 'info') {
-            const notificationId = Date.now();
-            
-            state.notificationQueue.push({
-                id: notificationId,
-                title,
-                message,
-                type
-            });
-            
-            processNotificationQueue();
-        }
-
-        function processNotificationQueue() {
-            if (state.isNotificationShowing || state.notificationQueue.length === 0) {
-                return;
-            }
-            
-            state.isNotificationShowing = true;
-            const notif = state.notificationQueue.shift();
-            
-            // Update notification content
-            notificationTitle.textContent = notif.title;
-            notificationMessage.textContent = notif.message;
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
             
             // Set type
-            notification.className = `notification ${notif.type}`;
+            notification.className = `notification ${type}`;
             const icon = notification.querySelector('.notification-icon i');
             
-            switch(notif.type) {
+            switch(type) {
                 case 'success':
                     icon.className = 'fas fa-check-circle';
                     break;
@@ -3133,6 +2749,11 @@
             // Show notification
             notification.classList.add('show');
             
+            // Play sound
+            if (type === 'success') {
+                soundLibrary.notification();
+            }
+            
             // Auto-hide after delay
             setTimeout(() => {
                 closeNotification();
@@ -3141,39 +2762,28 @@
 
         function closeNotification() {
             notification.classList.remove('show');
-            
-            setTimeout(() => {
-                state.isNotificationShowing = false;
-                processNotificationQueue();
-            }, 500);
         }
 
-        // Render Conversation History
-        function renderConversationHistory() {
-            chatMessages.innerHTML = '';
+        // Disconnect from API
+        function disconnectFromAPI() {
+            state.isConnected = false;
+            state.isDemoMode = true;
+            state.apiKey = '';
             
-            state.conversationHistory.forEach(msg => {
-                addMessage(msg.content, msg.role === 'user' ? 'user' : 'ai');
-            });
+            localStorage.removeItem('nexa_gemini_api_key');
+            apiKeyInput.value = '';
             
-            // Scroll to bottom
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            testConnection.classList.remove('connected', 'testing');
+            testConnection.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+            
+            updateUIState();
+            
+            showNotification('Disconnected', 'Switched back to enhanced demo mode', 'info');
+            addMessage("Disconnected from Gemini API. Now running in enhanced demo mode with emotional intelligence simulation.", 'ai', 'default');
         }
 
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
-
-        // Export useful functions to global scope
-        window.NexaAI = {
-            sendMessage,
-            toggleVoiceInput,
-            showNotification,
-            copyMessage,
-            speakMessage,
-            state
-        };
-
-        console.log('✨ Nexa AI Premium JavaScript loaded successfully');
     </script>
 </body>
 </html>
